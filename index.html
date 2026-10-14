@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<link rel="icon" href="icon-192.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2e7d32"><link rel="apple-touch-icon" href="icon-192.png"><title>튼튼 대장 지키기</title><style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:linear-gradient(#a8e6cf,#dcedc1);height:100vh;overflow:hidden;touch-action:none}
+#hud{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:10px 14px;font-weight:700;font-size:18px;z-index:2;background:rgba(255,255,255,.6)}
+canvas{display:block}.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(0,0,0,.45)}
+.card{background:#fff;border-radius:20px;padding:24px;max-width:440px;width:92%;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.3);max-height:90vh;overflow:auto}
+h1{color:#2e7d32;margin-bottom:10px}h2{color:#c2185b;margin-bottom:10px}p,li{line-height:1.6;margin:6px 0}ul{text-align:left;padding-left:20px}
+button{font-size:18px;padding:12px 22px;border:0;border-radius:12px;background:#ff8a65;color:#fff;font-weight:700;margin-top:12px;cursor:pointer}
+.opt{display:block;width:100%;background:#4fc3f7;margin-top:8px;font-size:16px}.ok{background:#66bb6a!important}.no{background:#e57373!important}.hide{display:none}
+</style></head><body>
+<div id="hud"><span>⭐ <b id="sc">0</b></span><span id="hp">❤️❤️❤️❤️❤️</span></div>
+<canvas id="c"></canvas>
+<div id="start" class="screen"><div class="card"><h1>🌿 튼튼 대장 지키기</h1><p>바구니 🧺를 좌우로 움직여<br>건강한 음식과 습관을 받으세요!</p>
+<p>🥦🍎🍠🌾💧🏃 받으면 점수 UP<br>🌭🥓🥩🍺🚬🍟 받으면 -5점 & 바구니가 작아져요</p><p>⌨️ ←/→ 키 · 📱 터치/마우스로 이동</p><button id="go">시작하기</button></div></div>
+<div id="over" class="screen hide"><div class="card"><h1>게임 종료!</h1><p style="font-size:22px">점수: <b id="fs"></b></p><h2>대장암 예방 수칙</h2><ul>
+<li>🥦 채소·과일·통곡물로 식이섬유 충분히</li><li>🥩 붉은 고기는 적당히, 가공육은 줄이기</li><li>🏃 규칙적인 신체활동 (주 150분 이상)</li><li>🚭 금연, 🍺 절주</li><li>⚖️ 적정 체중 유지</li><li>🩺 만 50세 이상: 매년 분변잠혈검사(국가 암검진), 이상 시 대장내시경</li></ul><button id="re">다시 하기</button></div></div>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');let W,H;function rs(){W=c.width=innerWidth;H=c.height=innerHeight}rs();addEventListener('resize',rs);
+const G=['🥦','🥕','🍎','🍌','🍠','🌾','💧','🏃'],B=['🌭','🥓','🥩','🍺','🚬','🍟'];
+let stack=[],pops=[],p,items,score,hp,run,next,qi,keys={},t0,sp;
+function reset(){p={x:W/2,w:70};items=[];stack=[];pops=[];score=0;hp=5;next=30;sp=1;hud()}
+function bs(){return .4+.12*hp}function hud(){sc.textContent=score;document.getElementById('hp').textContent='❤️'.repeat(hp)+'🤍'.repeat(5-hp)}
+function spawn(){const g=Math.random()<.6;items.push({e:(g?G:B)[Math.random()*(g?G:B).length|0],g,x:30+Math.random()*(W-60),y:-30,v:(2+Math.random()*2)*sp})}
+let last=0,acc=0;function loop(t){if(!run)return;const dt=Math.min(50,t-(last||t));last=t;acc+=dt;if(acc>Math.max(350,800-score*4)){acc=0;spawn()}
+if(keys.ArrowLeft)p.x-=8;if(keys.ArrowRight)p.x+=8;p.x=Math.max(35,Math.min(W-35,p.x));x.clearRect(0,0,W,H);
+x.font='40px serif';x.textAlign='center';x.textBaseline='middle';const py=H-60;
+for(let i=items.length-1;i>=0;i--){const o=items[i];o.y+=o.v*dt/16;x.fillText(o.e,o.x,o.y);
+if(o.y>py-30&&o.y<py+20&&Math.abs(o.x-p.x)<p.w*bs()/2+15){items.splice(i,1);if(o.g){score+=5;stack.push(o.e);if(stack.length>6)stack.shift();pops.push({t:'+5',c:'#2e7d32',x:o.x,y:o.y,a:1})}else{score=Math.max(0,score-5);hp--;pops.push({t:'-5 바구니 축소!',c:'#d32f2f',x:o.x,y:o.y,a:1})}hud();if(hp<=0)return end();if(score>=next){next+=30;sp+=.15}}else if(o.y>H+40)items.splice(i,1)}
+const k=bs();x.font=(56*k|0)+'px serif';x.fillText('🧺',p.x,py);x.font=(22*k|0)+'px serif';stack.forEach((e,i)=>x.fillText(e,p.x+((i%3)-1)*18*k,py-14*k-(i/3|0)*14*k));for(let i=pops.length-1;i>=0;i--){const q=pops[i];q.y-=1.2*dt/16;q.a-=.02*dt/16;if(q.a<=0){pops.splice(i,1);continue}x.globalAlpha=q.a;x.font='bold 28px sans-serif';x.fillStyle=q.c;x.fillText(q.t,q.x,q.y);x.globalAlpha=1}requestAnimationFrame(loop)}
+function start(){reset();show();run=true;last=0;requestAnimationFrame(loop)}
+function show(id){['start','over'].forEach(s=>document.getElementById(s).classList.toggle('hide',s!==id))}
+function end(){run=false;fs.textContent=score;show('over')}
+go.onclick=start;re.onclick=start;
+addEventListener('keydown',e=>keys[e.key]=true);addEventListener('keyup',e=>keys[e.key]=false);
+const mv=e=>{const t=e.touches?e.touches[0]:e;if(t)p&&(p.x=t.clientX)};c.addEventListener('touchmove',e=>{e.preventDefault();mv(e)},{passive:false});c.addEventListener('touchstart',mv);c.addEventListener('mousemove',mv);
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));</script></body></html>
