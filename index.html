@@ -11,12 +11,12 @@ button{font-size:18px;padding:12px 22px;border:0;border-radius:12px;background:#
 <div id="hud"><span>⭐ <b id="sc">0</b></span><span id="hp">❤️❤️❤️❤️❤️</span></div>
 <canvas id="c"></canvas>
 <div id="start" class="screen"><div class="card"><h1>🌿 튼튼 대장 지키기</h1><p>바구니 🧺를 좌우로 움직여<br>건강한 음식과 습관을 받으세요!</p>
-<p>🥦🍎🍠🌾💧🏃 받으면 점수 UP<br>🌭🥓🥩🍺🚬🍟 받으면 -5점 & 바구니가 작아져요</p><p>⌨️ ←/→ 키 · 📱 터치/마우스로 이동</p><button id="go">시작하기</button></div></div>
+<p>🥦🥬🍅🍎🍇🌾🥜💧🏃 등 채소·과일·통곡물·물·운동은 +5점<br>🌭🥓🥩🍔🍟🍩🍺🥃🚬🥤 등 가공육·기름진 음식·단 음식·술·담배는 -5점 & 바구니가 작아져요</p><p>⌨️ ←/→ 키 · 📱 터치/마우스로 이동</p><button id="go">시작하기</button></div></div>
 <div id="over" class="screen hide"><div class="card"><h1>게임 종료!</h1><p style="font-size:22px">점수: <b id="fs"></b></p><h2>대장암 예방 수칙</h2><ul>
 <li>🥦 채소·과일·통곡물로 식이섬유 충분히</li><li>🥩 붉은 고기는 적당히, 가공육은 줄이기</li><li>🏃 규칙적인 신체활동 (주 150분 이상)</li><li>🚭 금연, 🍺 절주</li><li>⚖️ 적정 체중 유지</li><li>🩺 만 50세 이상: 매년 분변잠혈검사(국가 암검진), 이상 시 대장내시경</li></ul><button id="re">다시 하기</button></div></div>
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d');let W,H;function rs(){W=c.width=innerWidth;H=c.height=innerHeight}rs();addEventListener('resize',rs);
-const G=['🥦','🥕','🍎','🍌','🍠','🌾','💧','🏃'],B=['🌭','🥓','🥩','🍺','🚬','🍟'];
+const G=['🥦','🥕','🍎','🍌','🍠','🌾','💧','🥬','🍅','🍇','🍓','🥒','🌽','🍐','🥝','🍊','🧄','🥜','🍵','🏃'],B=['🌭','🥓','🥩','🍺','🚬','🍟','🍔','🍕','🍩','🧁','🍷','🥃','🍖','🍗','🥤','🍰'];
 let stack=[],pops=[],p,items,score,hp,run,next,qi,keys={},t0,sp;
 function reset(){p={x:W/2,w:70};items=[];stack=[];pops=[];score=0;hp=5;next=30;sp=1;hud()}
 function bs(){return .4+.12*hp}function hud(){sc.textContent=score;document.getElementById('hp').textContent='❤️'.repeat(hp)+'🤍'.repeat(5-hp)}
