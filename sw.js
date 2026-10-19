@@ -1,4 +1,4 @@
-const C='daejang-v15',F=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png'];
+const C='daejang-v16',F=['./','./index.html','./games.html','./manifest.json','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{
   self.skipWaiting();
   e.waitUntil(caches.open(C).then(c=>Promise.all(F.map(u=>fetch(u,{cache:'reload'}).then(r=>c.put(u,r))))));

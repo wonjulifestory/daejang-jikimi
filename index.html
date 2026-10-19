@@ -1,42 +1,53 @@
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<link rel="icon" href="icon-192.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2e7d32"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="대장 지킴이"><link rel="apple-touch-icon" href="icon-192.png"><title>튼튼 대장 지키기</title><style>
+<link rel="icon" href="icon-192.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2e7d32"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="대장 지킴이"><link rel="apple-touch-icon" href="icon-192.png"><title>튼튼 대장 지키기 - 게임 타일 허브</title><style>
 *{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden;position:fixed;inset:0;-webkit-text-size-adjust:100%;text-size-adjust:100%}body{font-family:system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:linear-gradient(#a8e6cf,#dcedc1);touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
-#hud{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;font-weight:700;font-size:18px;z-index:2;background:rgba(255,255,255,.76);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 2px 10px rgba(0,0,0,.06);pointer-events:none}
+#hud{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;font-weight:700;font-size:18px;z-index:2;background:rgba(255,255,255,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 2px 10px rgba(0,0,0,.06);pointer-events:none}
 .hud-l,.hud-r{display:flex;align-items:center;gap:7px}
 .pill{background:rgba(46,125,50,.12);color:#1b5e20;padding:3px 9px;border-radius:999px;font-size:13px;font-weight:800;display:inline-flex;align-items:center;gap:4px}
 .pill.gold{background:rgba(255,179,0,.2);color:#bf360c}
-.icon-btn{pointer-events:auto;background:rgba(255,255,255,.9);border:1px solid rgba(46,125,50,.25);border-radius:10px;padding:4px 8px;font-size:16px;line-height:1;cursor:pointer;margin:0;color:#2e7d32;box-shadow:0 2px 5px rgba(0,0,0,.08);transition:transform .12s}
+.icon-btn{pointer-events:auto;background:rgba(255,255,255,.92);border:1px solid rgba(46,125,50,.28);border-radius:10px;padding:4px 8px;font-size:16px;line-height:1;cursor:pointer;margin:0;color:#2e7d32;box-shadow:0 2px 5px rgba(0,0,0,.08);transition:transform .12s}
 .icon-btn:active{transform:scale(.92)}
 canvas{display:block;touch-action:none;position:fixed;left:0;top:0;width:100%;height:100%;z-index:1}
-.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(0,0,0,.48);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);padding:12px}
-.card{background:#fff;border-radius:22px;padding:20px 18px;max-width:450px;width:95%;text-align:center;box-shadow:0 12px 36px rgba(0,0,0,.32);max-height:91vh;overflow-y:auto;animation:popIn .22s cubic-bezier(.2,.9,.3,1)}
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(0,0,0,.48);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:12px}
+.card{background:#fff;border-radius:24px;padding:20px 18px;max-width:460px;width:95%;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.32);max-height:92vh;overflow-y:auto;animation:popIn .22s cubic-bezier(.2,.9,.3,1)}
 @keyframes popIn{from{opacity:0;transform:scale(.93) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
-h1{color:#2e7d32;margin-bottom:6px;font-size:24px;letter-spacing:-.5px}h2{color:#c2185b;margin:10px 0 6px;font-size:17px}p,li{line-height:1.5;margin:5px 0;color:#263238;font-size:14.5px}ul{text-align:left;padding-left:20px;background:#f1f8e9;border-radius:14px;padding:10px 12px 10px 28px;margin:6px 0}
+h1{color:#2e7d32;margin-bottom:4px;font-size:24px;letter-spacing:-.5px}h2{color:#c2185b;margin:10px 0 6px;font-size:17px}p,li{line-height:1.5;margin:5px 0;color:#263238;font-size:14.5px}ul{text-align:left;padding-left:20px;background:#f1f8e9;border-radius:14px;padding:10px 12px 10px 28px;margin:6px 0}
 button{font-size:17px;padding:11px 18px;border:0;border-radius:12px;background:linear-gradient(135deg,#ff8a65,#ff7043);color:#fff;font-weight:700;margin-top:8px;cursor:pointer;box-shadow:0 4px 12px rgba(255,112,67,.35);transition:transform .12s,box-shadow .12s}
 button:active{transform:scale(.96)}
-.mode-list{display:flex;flex-direction:column;gap:8px;margin:10px 0;text-align:left}
-.mode-card{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f1f8e9;border:2px solid #aed581;border-radius:16px;padding:11px 13px;cursor:pointer;transition:transform .12s,box-shadow .12s}
-.mode-card:active{transform:scale(.98)}
-.mode-card.shoot{background:#e3f2fd;border-color:#64b5f6}
-.mode-card.sort{background:#fff8e1;border-color:#ffd54f}
-.mode-info{flex:1}
-.mode-title{font-weight:800;font-size:16px;color:#1b5e20;display:flex;align-items:center;gap:6px}
-.mode-card.shoot .mode-title{color:#0d47a1}
-.mode-card.sort .mode-title{color:#e65100}
-.mode-desc{font-size:12.5px;color:#455a64;margin-top:3px;line-height:1.35}
-.mode-best{font-size:11px;font-weight:800;background:rgba(255,255,255,.85);padding:2px 7px;border-radius:999px;color:#37474f;margin-left:auto}
-.mode-play{margin:0;padding:9px 14px;font-size:14px;border-radius:10px;white-space:nowrap;flex-shrink:0}
-.mode-card.shoot .mode-play{background:linear-gradient(135deg,#1e88e5,#1565c0);box-shadow:0 3px 10px rgba(21,101,192,.3)}
-.mode-card.sort .mode-play{background:linear-gradient(135deg,#fb8c00,#ef6c00);box-shadow:0 3px 10px rgba(239,108,0,.3)}
+
+/* 2x2 타일 그리드 디자인 */
+.tile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+.game-tile{display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:14px 10px 12px;border-radius:20px;cursor:pointer;text-align:center;position:relative;transition:transform .14s,box-shadow .14s;border:2.5px solid transparent;min-height:162px}
+.game-tile:active{transform:scale(.96)}
+.game-tile.t1{background:linear-gradient(145deg,#e8f5e9,#c8e6c9);border-color:#66bb6a;box-shadow:0 6px 16px rgba(46,125,50,.15)}
+.game-tile.t2{background:linear-gradient(145deg,#e3f2fd,#bbdefb);border-color:#42a5f5;box-shadow:0 6px 16px rgba(21,101,192,.15)}
+.game-tile.t3{background:linear-gradient(145deg,#fff8e1,#ffecb3);border-color:#ffa726;box-shadow:0 6px 16px rgba(239,108,0,.15)}
+.game-tile.t4{background:linear-gradient(145deg,#f3e5f5,#e1bee7);border-color:#ab47bc;box-shadow:0 6px 16px rgba(123,31,162,.15)}
+.tile-badge{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.9);font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:999px;color:#37474f;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.tile-num{position:absolute;top:8px;left:9px;width:22px;height:22px;border-radius:50%;background:#2e7d32;color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.game-tile.t2 .tile-num{background:#1565c0}
+.game-tile.t3 .tile-num{background:#ef6c00}
+.game-tile.t4 .tile-num{background:#7b1fa2}
+.tile-icon{font-size:36px;line-height:1.15;margin-top:10px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.12))}
+.tile-title{font-weight:900;font-size:16px;color:#1b5e20;margin-top:6px;letter-spacing:-.3px}
+.game-tile.t2 .tile-title{color:#0d47a1}
+.game-tile.t3 .tile-title{color:#e65100}
+.game-tile.t4 .tile-title{color:#6a1b9a}
+.tile-desc{font-size:11.5px;color:#37474f;line-height:1.3;margin:4px 0 8px;font-weight:600}
+.tile-btn{width:100%;padding:7px 0;font-size:13.5px;font-weight:800;border-radius:10px;margin:0;background:#2e7d32;color:#fff;box-shadow:none}
+.game-tile.t2 .tile-btn{background:#1565c0}
+.game-tile.t3 .tile-btn{background:#ef6c00}
+.game-tile.t4 .tile-btn{background:#7b1fa2}
+
 .btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
 .btn-row button{margin-top:0;flex:1;min-width:100px}
-.btn-sub{background:linear-gradient(135deg,#43a047,#2e7d32);box-shadow:0 4px 12px rgba(46,125,50,.28);font-size:15px;padding:10px 14px}
+.btn-sub{background:linear-gradient(135deg,#43a047,#2e7d32);box-shadow:0 4px 12px rgba(46,125,50,.28);font-size:14.5px;padding:10px 14px}
 .btn-pwa{background:linear-gradient(135deg,#1e88e5,#1565c0);box-shadow:0 4px 12px rgba(21,101,192,.28);font-size:14.5px;padding:10px 14px;width:100%;margin-top:7px}
-.btn-ghost{background:#eceff1;color:#37474f;box-shadow:none;font-size:15px;padding:10px 14px}
+.btn-ghost{background:#eceff1;color:#37474f;box-shadow:none;font-size:14.5px;padding:10px 14px}
 .stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;background:#f1f8e9;border:1px solid #c5e1a5;border-radius:14px;padding:8px 6px;margin:8px 0}
 .stat-box{display:flex;flex-direction:column;align-items:center;font-size:11.5px;color:#558b2f;font-weight:600}
 .stat-box b{font-size:16px;color:#1b5e20;margin-top:1px}
-.tip-banner{background:linear-gradient(90deg,#e8f5e9,#e3f2fd);border-left:4px solid #1e88e5;border-radius:10px;padding:7px 11px;font-size:13px;color:#1b5e20;font-weight:700;margin:6px 0;text-align:left}
+.tip-banner{background:linear-gradient(90deg,#e8f5e9,#e3f2fd);border-left:4px solid #1e88e5;border-radius:10px;padding:7px 11px;font-size:12.5px;color:#1b5e20;font-weight:700;margin:6px 0;text-align:left}
 .rank-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#fff8e1,#ffe082);color:#e65100;border:2px solid #ffb300;border-radius:999px;padding:5px 15px;font-weight:800;font-size:15px;margin:3px 0 5px;box-shadow:0 3px 10px rgba(255,179,0,.22)}
 .new-rec{display:inline-block;background:#d32f2f;color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:999px;margin-left:6px;vertical-align:middle}
 .tabs{display:flex;gap:6px;margin:8px 0}
@@ -63,7 +74,7 @@ button:active{transform:scale(.96)}
 </style></head><body>
 <div id="hud">
   <div class="hud-l">
-    <button id="btn-home" class="icon-btn" aria-label="게임 선택 홈" title="게임 선택">🏠</button>
+    <button id="btn-home" class="icon-btn" aria-label="게임 선택 홈" title="타일 메뉴로">🏠</button>
     <span>⭐ <b id="sc">0</b></span>
     <span class="pill gold" title="최고 점수">🏆 <b id="bs_ui">0</b></span>
     <span class="pill" title="현재 단계">LV.<b id="lv_ui">1</b></span>
@@ -78,36 +89,48 @@ button:active{transform:scale(.96)}
 
 <div id="start" class="screen"><div class="card">
   <h1>🌿 튼튼 대장 지키기</h1>
-  <p style="font-size:13.5px;color:#455a64;margin-top:-2px">원하는 대장암 예방 게임을 골라 플레이하세요!</p>
+  <p style="font-size:13.5px;color:#455a64;margin-top:-2px">원하는 대장암 예방 게임 타일을 눌러 시작하세요!</p>
   <div class="stats-bar">
     <div class="stat-box"><span>🏆 통합 최고점</span><b id="st-best">0</b></div>
     <div class="stat-box"><span>🔥 최고 콤보</span><b id="st-combo">0</b></div>
     <div class="stat-box"><span>📖 도감 수집</span><b id="st-dex">0/34</b></div>
   </div>
 
-  <div class="mode-list">
-    <div class="mode-card" id="card-catch">
-      <div class="mode-info">
-        <div class="mode-title">1. 🧺 떨어지는 게임 <span class="mode-best" id="best-catch">최고 0</span></div>
-        <div class="mode-desc">떨어지는 채소·과일·운동·<b>건강검진(🩺🏥)</b>을 바구니로 받고 발암 습관은 피하세요!</div>
-      </div>
-      <button id="go" class="mode-play">게임 시작</button>
+  <div class="tile-grid">
+    <div class="game-tile t1" id="card-catch">
+      <span class="tile-num">1</span>
+      <span class="tile-badge" id="best-catch">최고 0</span>
+      <div class="tile-icon">🧺🥦🩺</div>
+      <div class="tile-title">떨어지는 게임</div>
+      <div class="tile-desc">바구니로 채소·운동·<b>건강검진</b> 받고 발암물질 피하기</div>
+      <button id="go" class="tile-btn">시작하기</button>
     </div>
 
-    <div class="mode-card shoot" id="card-shoot">
-      <div class="mode-info">
-        <div class="mode-title">2. 🚀 슈팅 게임 <span class="mode-best" id="best-shoot">최고 0</span></div>
-        <div class="mode-desc">내시경 광선으로 <b>대장 용종(👾)</b>과 발암물질(🌭🍺🚬)을 쏴서 없애고 <b>3단 광선</b>으로 강화하세요!</div>
-      </div>
-      <button id="go-shoot" class="mode-play">슈팅 시작</button>
+    <div class="game-tile t2" id="card-shoot">
+      <span class="tile-num">2</span>
+      <span class="tile-badge" id="best-shoot">최고 0</span>
+      <div class="tile-icon">🚀👾💥</div>
+      <div class="tile-title">슈팅 게임</div>
+      <div class="tile-desc">내시경 광선으로 <b>대장 용종</b>과 발암물질 쏴서 없애기</div>
+      <button id="go-shoot" class="tile-btn">시작하기</button>
     </div>
 
-    <div class="mode-card sort" id="card-sort">
-      <div class="mode-info">
-        <div class="mode-title">3. ⚡ OX 판별 게임 <span class="mode-best" id="best-sort">최고 0</span></div>
-        <div class="mode-desc">나타나는 음식·습관이 대장에 <b>좋은지(⭕) 해로운지(❌)</b> 빠르게 고르는 순발력 게임!</div>
-      </div>
-      <button id="go-sort" class="mode-play">판별 시작</button>
+    <div class="game-tile t3" id="card-sort">
+      <span class="tile-num">3</span>
+      <span class="tile-badge" id="best-sort">최고 0</span>
+      <div class="tile-icon">⚡⭕❌</div>
+      <div class="tile-title">OX 스피드 게임</div>
+      <div class="tile-desc">좋은 습관(⭕)과 해로운 습관(❌) 빠르게 판별하기</div>
+      <button id="go-sort" class="tile-btn">시작하기</button>
+    </div>
+
+    <div class="game-tile t4" id="card-whack">
+      <span class="tile-num">4</span>
+      <span class="tile-badge" id="best-whack">최고 0</span>
+      <div class="tile-icon">🩺👾🔨</div>
+      <div class="tile-title">용종 터치 게임</div>
+      <div class="tile-desc">올라오는 <b>대장 용종·발암물질</b>만 톡톡 눌러 제거하기</div>
+      <button id="go-whack" class="tile-btn">시작하기</button>
     </div>
   </div>
 
@@ -143,7 +166,7 @@ button:active{transform:scale(.96)}
   <div class="btn-row">
     <button id="btn-resume">계속하기</button>
     <button id="btn-restart" class="btn-sub">다시 시작</button>
-    <button id="btn-pause-home" class="btn-ghost">🏠 게임 선택</button>
+    <button id="btn-pause-home" class="btn-ghost">🏠 다른 게임</button>
   </div>
 </div></div>
 
@@ -225,7 +248,7 @@ const INFO={
 };
 
 const STORE_KEY='daejang_save_v12';
-let save={best:0,bestShoot:0,bestSort:0,maxCombo:0,dex:{}};
+let save={best:0,bestShoot:0,bestSort:0,bestWhack:0,maxCombo:0,dex:{}};
 try{const raw=localStorage.getItem(STORE_KEY);if(raw)save=Object.assign(save,JSON.parse(raw))}catch(e){}
 function persist(){try{localStorage.setItem(STORE_KEY,JSON.stringify(save))}catch(e){}}
 
@@ -247,8 +270,8 @@ function sfxHit(){tone(420,.05,'square',.07)}
 function sfxLv(){[523,659,784,1046].forEach((f,i)=>tone(f,.13,'triangle',.12,i*.06))}
 function sfxOver(){[392,349,330,262].forEach((f,i)=>tone(f,.2,'sine',.12,i*.11))}
 
-let mode='catch'; // 'catch' | 'shoot' | 'sort'
-let stack=[],pops=[],parts=[],bullets=[],items,score,hp,run=false,paused=false,next,qi,keys={},t0,sp,combo=0,maxCombo=0,goodCnt=0,bScale=1,shake=0,badFlash=0;
+let mode='catch'; // 'catch' | 'shoot' | 'sort' | 'whack'
+let stack=[],pops=[],parts=[],bullets=[],holes=[],items,score,hp,run=false,paused=false,next,qi,keys={},t0,sp,combo=0,maxCombo=0,goodCnt=0,bScale=1,shake=0,badFlash=0;
 let wpn=1,wpnHits=0,shotAcc=0;
 let sortCur=null,sortTimer=0,sortMax=3200,sortFact='';
 const clouds=[{x:.15,y:.14,s:38,v:.012},{x:.55,y:.22,s:30,v:.008},{x:.82,y:.11,s:44,v:.01}];
@@ -262,22 +285,24 @@ function getRank(s){
 }
 
 function getModeBest(){
-  return mode==='shoot'?(save.bestShoot||0):mode==='sort'?(save.bestSort||0):(save.best||0);
+  return mode==='shoot'?(save.bestShoot||0):mode==='sort'?(save.bestSort||0):mode==='whack'?(save.bestWhack||0):(save.best||0);
 }
 
 function updateStartStats(){
-  const topBest=Math.max(save.best||0,save.bestShoot||0,save.bestSort||0);
+  const topBest=Math.max(save.best||0,save.bestShoot||0,save.bestSort||0,save.bestWhack||0);
   document.getElementById('st-best').textContent=topBest;
   document.getElementById('st-combo').textContent=save.maxCombo||0;
   document.getElementById('best-catch').textContent='최고 '+(save.best||0);
   document.getElementById('best-shoot').textContent='최고 '+(save.bestShoot||0);
   document.getElementById('best-sort').textContent='최고 '+(save.bestSort||0);
+  document.getElementById('best-whack').textContent='최고 '+(save.bestWhack||0);
   const cnt=Object.keys(save.dex).filter(k=>save.dex[k]>0).length;
   document.getElementById('st-dex').textContent=cnt+'/34';
   document.getElementById('bs_ui').textContent=getModeBest();
 }
 updateStartStats();
 
+const HABITS=['🩺','🏥','🏃'];
 function nextSortItem(){
   const g=Math.random()<.52;
   const e=g?(Math.random()<.24?HABITS[Math.random()*HABITS.length|0]:G[Math.random()*G.length|0]):(Math.random()<.15?'👾':B[Math.random()*B.length|0]);
@@ -286,11 +311,16 @@ function nextSortItem(){
   sortTimer=sortMax;
 }
 
+function initHoles(){
+  holes=Array.from({length:9},()=>({e:null,g:false,polyp:false,t:0,max:0}));
+}
+
 function reset(){
   p={x:W/2,w:70};items=[];stack=[];pops=[];parts=[];bullets=[];
   score=0;hp=5;next=30;sp=1;combo=0;maxCombo=0;goodCnt=0;bScale=1;shake=0;badFlash=0;paused=false;
   wpn=1;wpnHits=0;shotAcc=0;sortFact='음식·습관을 보고 아래 ❌ / ⭕ 버튼을 누르세요!';
   if(mode==='sort')nextSortItem();
+  if(mode==='whack')initHoles();
   hud();
 }
 function bs(){return .4+.12*hp}
@@ -300,10 +330,9 @@ function hud(){
   document.getElementById('bs_ui').textContent=Math.max(getModeBest(),score);
   document.getElementById('lv_ui').textContent=Math.round((sp-1)/.15)+1;
 }
-const HABITS=['🩺','🏥','🏃'];
+
 function spawn(){
   if(mode==='shoot'){
-    // 슈팅 모드: 발암 요인(B) 55%, 대장 용종(👾) 15%, 건강 아이템(G) 30%
     const r=Math.random();
     if(r<.30){
       const e=Math.random()<.32?HABITS[Math.random()*HABITS.length|0]:G[Math.random()*G.length|0];
@@ -371,6 +400,45 @@ function judgeSort(ansGood){
   nextSortItem();
 }
 
+function whackGridGeom(){
+  const gw=Math.min(W-32,360),cell=gw/3,gx=(W-gw)/2,gy=Math.max(115,(H-gw)/2-10);
+  return {gw,cell,gx,gy};
+}
+
+function tapWhack(cx,cy){
+  if(!run||paused||mode!=='whack')return;
+  const {cell,gx,gy}=whackGridGeom();
+  for(let i=0;i<9;i++){
+    const col=i%3,row=i/3|0;
+    const hx=gx+col*cell+cell/2,hy=gy+row*cell+cell/2;
+    if(Math.hypot(cx-hx,cy-hy)<cell*.46){
+      const h=holes[i];
+      if(!h.e)return;
+      save.dex[h.e]=(save.dex[h.e]||0)+1;
+      const e=h.e,isG=h.g,isPolyp=h.polyp,isMed=e==='🩺'||e==='🏥';
+      h.e=null;h.t=0;
+      if(!isG||isMed){
+        // 용종·발암물질 제거 성공 또는 건강검진 획득!
+        const pts=isPolyp?10:5;
+        score+=pts;goodCnt++;combo++;if(combo>maxCombo)maxCombo=combo;
+        pops.push({t:isMed?'🩺 검진 하트회복! +5':isPolyp?'+10 용종 절제!':'+5 발암 퇴치!',c:isPolyp?'#6a1b9a':isMed?'#1565c0':'#2e7d32',x:hx,y:hy-20,a:1.1});
+        burst(hx,hy,true);sfxGood(combo);
+        if(isMed&&hp<5){hp++;sfxLv()}
+        else if(combo>0&&combo%10===0){if(hp<5)hp++;pops.push({t:'💚 10콤보 보너스!',c:'#1b5e20',x:W/2,y:gy-24,a:1.2});sfxLv()}
+        if(score>=next){next+=30;sp+=.15;sfxLv()}
+      }else{
+        // 좋은 채소·과일을 잘못 쳐서 파괴함
+        score=Math.max(0,score-5);hp--;combo=0;shake=7;badFlash=.32;
+        pops.push({t:'-5 좋은 음식은 아껴요!',c:'#d32f2f',x:hx,y:hy-20,a:1.1});
+        burst(hx,hy,false);sfxBad();
+      }
+      hud();
+      if(hp<=0)end();
+      return;
+    }
+  }
+}
+
 let last=0,acc=0;
 function loop(t){
   if(!run||paused)return;
@@ -396,7 +464,65 @@ function loop(t){
   if(sx)x.translate(sx,0);
   x.textAlign='center';x.textBaseline='middle';
 
-  if(mode==='sort'){
+  if(mode==='whack'){
+    // 모드 4: 용종 터치 (두더지 잡기) 모드
+    if(acc>Math.max(380,820-score*4)){
+      acc=0;
+      const empty=holes.map((h,idx)=>h.e?null:idx).filter(v=>v!==null);
+      if(empty.length){
+        const idx=empty[Math.random()*empty.length|0];
+        const r=Math.random();
+        let e,g=false,polyp=false;
+        if(r<.32){e='👾';polyp=true}
+        else if(r<.72){e=B[Math.random()*B.length|0]}
+        else if(r<.82){e=Math.random()<.5?'🩺':'🏥';g=true}
+        else{e=G[Math.random()*15|0];g=true}
+        const max=Math.max(850,1750-score*4);
+        holes[idx]={e,g,polyp,t:max,max};
+      }
+    }
+    x.fillStyle='rgba(255,255,255,.88)';
+    x.beginPath();x.roundRect?x.roundRect(16,58,W-32,42,12):x.rect(16,58,W-32,42);x.fill();
+    x.fillStyle='#6a1b9a';x.font='bold 14px sans-serif';
+    x.fillText('👾 대장 용종·발암물질(🌭🍺🚬)과 🩺검진만 터치하세요! (채소 터치 금지)',W/2,79);
+
+    const {cell,gx,gy}=whackGridGeom();
+    for(let i=0;i<9;i++){
+      const col=i%3,row=i/3|0;
+      const hx=gx+col*cell+cell/2,hy=gy+row*cell+cell/2;
+      const h=holes[i];
+      // 홀 배경
+      x.fillStyle='rgba(255,255,255,.75)';
+      x.beginPath();x.arc(hx,hy,cell*.42,0,6.28);x.fill();
+      x.lineWidth=3;
+      x.strokeStyle=h.e?(h.polyp?'#8e24aa':!h.g?'#e53935':(h.e==='🩺'||h.e==='🏥')?'#1e88e5':'#66bb6a'):'rgba(46,125,50,.3)';
+      x.stroke();
+
+      if(h.e){
+        h.t-=dt;
+        if(h.t<=0){
+          const missedPolyp=h.polyp;
+          h.e=null;
+          if(missedPolyp){
+            hp--;combo=0;shake=6;badFlash=.25;
+            pops.push({t:'⚠️ 용종 놓침! ❤️-1',c:'#d32f2f',x:hx,y:hy,a:1.1});
+            sfxBad();hud();
+            if(hp<=0){x.restore();return end()}
+          }
+          continue;
+        }
+        x.font=(cell*.52|0)+'px serif';
+        di(h.e,hx,hy-4,cell*.58);
+        x.font='bold 11px sans-serif';
+        x.fillStyle=h.polyp?'#6a1b9a':!h.g?'#c62828':(h.e==='🩺'||h.e==='🏥')?'#1565c0':'#2e7d32';
+        x.fillText(h.polyp?'용종 터치!':!h.g?'발암 터치!':(h.e==='🩺'||h.e==='🏥')?'검진 보너스!':'좋은음식(보호)',hx,hy+cell*.30);
+      }
+    }
+    if(combo>=2){
+      x.font='bold 18px sans-serif';x.fillStyle='#6a1b9a';
+      x.fillText('🔥 '+combo+' COMBO!',W/2,gy+cell*3+24);
+    }
+  }else if(mode==='sort'){
     // 모드 3: 초스피드 판별 모드
     sortTimer-=dt;
     if(sortTimer<=0){
@@ -406,21 +532,18 @@ function loop(t){
       if(hp<=0){x.restore();return end()}
       nextSortItem();
     }
-    // 상단 의학 팩트 배너
     x.fillStyle='rgba(255,255,255,.85)';
     x.beginPath();x.roundRect?x.roundRect(16,58,W-32,48,12):x.rect(16,58,W-32,48);x.fill();
     x.fillStyle='#1b5e20';x.font='bold 13px sans-serif';
     x.fillText(sortFact.slice(0,36),W/2,75);
     if(sortFact.length>36){x.font='12px sans-serif';x.fillStyle='#455a64';x.fillText(sortFact.slice(36,74),W/2,93)}
 
-    // 제한시간 바
     const ratio=Math.max(0,sortTimer/sortMax);
     x.fillStyle='rgba(0,0,0,.1)';
     x.fillRect(40,120,W-80,10);
     x.fillStyle=ratio>.4?'#43a047':'#e53935';
     x.fillRect(40,120,(W-80)*ratio,10);
 
-    // 중앙 카드 및 아이템
     if(sortCur){
       sortCur.scale=Math.min(1,sortCur.scale+.12*dt/16);
       const cy=H*.40;
@@ -440,7 +563,6 @@ function loop(t){
       x.fillText('🔥 '+combo+' COMBO!',W/2,py-10);
     }
 
-    // 하단 OX 버튼 영역 (CZ 아래)
     x.fillStyle='rgba(46,125,50,.12)';x.fillRect(0,CZ,W,H-CZ);
     x.fillStyle='rgba(46,125,50,.5)';x.fillRect(0,CZ,W,3);
     const bw=(W-36)/2,bh=H-CZ-28,by=CZ+14;
@@ -455,12 +577,11 @@ function loop(t){
     x.fillText('← 키 또는 왼쪽 터치',12+bw/2,by+bh/2+16);
     x.fillText('→ 키 또는 오른쪽 터치',24+bw+bw/2,by+bh/2+16);
   }else{
-    // 모드 1 (건강 바구니) & 모드 2 (대장 수호 슈팅) 공통 이동 및 생성
+    // 모드 1 (떨어지는 게임) & 모드 2 (슈팅 게임)
     if(acc>Math.max(340,780-score*4)){acc=0;spawn()}
     if(keys.ArrowLeft)p.x-=8;if(keys.ArrowRight)p.x+=8;
     p.x=Math.max(35,Math.min(W-35,p.x));
 
-    // 슈팅 모드 자동 광선 발사 및 총알 이동
     if(mode==='shoot'){
       shotAcc+=dt;
       const fireInt=Math.max(155,250-wpn*22);
@@ -469,7 +590,6 @@ function loop(t){
         const b=bullets[i];
         b.x+=b.vx*dt/16;b.y+=b.vy*dt/16;
         if(b.y<-20||b.x<0||b.x>W){bullets.splice(i,1);continue}
-        // 광선 그리기
         x.save();
         x.fillStyle=wpn>=3?'#00e676':wpn===2?'#29b6f6':'#1de9b6';
         x.beginPath();x.arc(b.x,b.y,5,0,6.28);x.fill();
@@ -483,7 +603,6 @@ function loop(t){
       const isMed=o.e==='🩺'||o.e==='🏥';
       const isPolyp=o.e==='👾';
 
-      // 슈팅 모드: 광선과 나쁜 아이템/용종 충돌 판정
       if(mode==='shoot'&&!o.g){
         let killed=false;
         for(let j=bullets.length-1;j>=0;j--){
@@ -513,7 +632,6 @@ function loop(t){
         if(killed)continue;
       }
 
-      // 아이템 후광 및 이름표 그리기
       x.save();
       x.beginPath();x.arc(o.x,o.y,38,0,6.28);
       x.fillStyle=isPolyp?'rgba(156,39,176,.24)':isMed?'rgba(30,136,229,.22)':(o.g?'rgba(255,255,255,.32)':'rgba(229,57,53,.13)');
@@ -535,13 +653,11 @@ function loop(t){
         x.font='bold 11px sans-serif';x.fillStyle='#fff';
         x.fillText(lbl,o.x,o.y+37);
       }else if(mode==='shoot'&&o.mhp>1){
-        // 체력 바 표시
         x.fillStyle='rgba(0,0,0,.25)';x.fillRect(o.x-22,o.y+30,44,6);
         x.fillStyle='#e53935';x.fillRect(o.x-22,o.y+30,44*(o.hp/o.mhp),6);
       }
       x.restore();
 
-      // 플레이어(바구니/수호기)와 충돌 판정
       if(o.y>py-45&&o.y<py+25&&Math.abs(o.x-p.x)<p.w*bs()/2+27){
         items.splice(i,1);
         save.dex[o.e]=(save.dex[o.e]||0)+1;
@@ -575,7 +691,6 @@ function loop(t){
         if(score>=next){next+=30;sp+=.15;pops.push({t:'⚡ 속도 UP! (LV.'+(Math.round((sp-1)/.15)+1)+')',c:'#1565c0',x:W/2,y:H*.32,a:1.2});sfxLv()}
       }else if(o.y>CZ+10){
         items.splice(i,1);
-        // 슈팅 모드에서 대장 용종(👾)을 제거하지 못하고 놓치면 경고 및 하트 1 감소
         if(mode==='shoot'&&isPolyp){
           hp--;combo=0;shake=6;badFlash=.28;
           pops.push({t:'⚠️ 용종 방치 위험! ❤️-1',c:'#b71c1c',x:o.x,y:CZ-20,a:1.2});
@@ -602,7 +717,6 @@ function loop(t){
     x.font='13px sans-serif';x.fillStyle='rgba(46,125,50,.7)';
     x.fillText(mode==='shoot'?'좌우 드래그 · 자동 광선 발사 (건강아이템 획득 시 무기 강화)':'좌우로 드래그',W/2,ty+24);
 
-    // 바구니 / 내시경 수호 캡슐 그리기
     if(bScale>1)bScale=Math.max(1,bScale-.025*dt/16);
     const k=bs()*bScale;
     x.font=(56*k|0)+'px serif';
@@ -611,7 +725,6 @@ function loop(t){
     stack.forEach((e,i)=>di(e,p.x+((i%3)-1)*18*k,py-14*k-(i/3|0)*14*k,27*k));
 
     if(mode==='shoot'){
-      // 슈팅 포탑/내시경 광선 발사기 표시
       x.fillStyle='#1565c0';
       x.beginPath();x.arc(p.x,py-26*k,10,0,6.28);x.fill();
       x.font='bold 12px sans-serif';x.fillStyle='#0d47a1';
@@ -625,7 +738,6 @@ function loop(t){
     }
   }
 
-  // 파티클 업데이트
   for(let i=parts.length-1;i>=0;i--){
     const pt=parts[i];
     pt.x+=pt.vx*dt/16;pt.y+=pt.vy*dt/16;pt.vy+=.15*dt/16;pt.a-=.032*dt/16;
@@ -635,7 +747,6 @@ function loop(t){
   }
   x.globalAlpha=1;
 
-  // 점수 팝업
   for(let i=pops.length-1;i>=0;i--){
     const q=pops[i];q.y-=1.2*dt/16;q.a-=.02*dt/16;
     if(q.a<=0){pops.splice(i,1);continue}
@@ -664,18 +775,19 @@ function end(){
   if(isNew){
     if(mode==='shoot')save.bestShoot=score;
     else if(mode==='sort')save.bestSort=score;
+    else if(mode==='whack')save.bestWhack=score;
     else save.best=score;
   }
   if(maxCombo>(save.maxCombo||0))save.maxCombo=maxCombo;
   persist();updateStartStats();
-  const modeNames={catch:'🧺 건강 바구니',shoot:'🚀 대장 수호 슈팅',sort:'⚡ 초스피드 판별'};
+  const modeNames={catch:'1. 떨어지는 게임',shoot:'2. 슈팅 게임',sort:'3. OX 스피드 게임',whack:'4. 용종 터치 게임'};
   document.getElementById('over-title').textContent=`${modeNames[mode]} 종료!`;
   fs.textContent=score;
   document.getElementById('new-rec').classList.toggle('hide',!isNew||score===0);
   document.getElementById('rk-badge').textContent=getRank(score);
   document.getElementById('best-fs').textContent=getModeBest();
   document.getElementById('mc-fs').textContent=maxCombo;
-  document.getElementById('stat3-lbl').textContent=mode==='shoot'?'💥 격파·획득':mode==='sort'?'⭕ 정답 판별':'🧺 건강 획득';
+  document.getElementById('stat3-lbl').textContent=mode==='shoot'?'💥 격파·획득':mode==='sort'?'⭕ 정답 판별':mode==='whack'?'🔨 용종 절제':'🧺 건강 획득';
   document.getElementById('gc-fs').textContent=goodCnt+'회';
   show('over');
 }
@@ -686,12 +798,14 @@ document.getElementById('go-shoot').onclick=e=>{e.stopPropagation();startMode('s
 document.getElementById('card-shoot').onclick=()=>startMode('shoot');
 document.getElementById('go-sort').onclick=e=>{e.stopPropagation();startMode('sort')};
 document.getElementById('card-sort').onclick=()=>startMode('sort');
+document.getElementById('go-whack').onclick=e=>{e.stopPropagation();startMode('whack')};
+document.getElementById('card-whack').onclick=()=>startMode('whack');
+
 re.onclick=()=>startMode(mode);
 document.getElementById('btn-choose').onclick=()=>{run=false;paused=false;updateStartStats();show('start')};
 document.getElementById('btn-home').onclick=e=>{e.stopPropagation();run=false;paused=false;updateStartStats();show('start')};
 document.getElementById('btn-pause-home').onclick=()=>{run=false;paused=false;updateStartStats();show('start')};
 
-// 일시정지 & 소리 제어
 const btnSnd=document.getElementById('btn-snd'),btnPause=document.getElementById('btn-pause');
 btnSnd.onclick=e=>{e.stopPropagation();sndOn=!sndOn;btnSnd.textContent=sndOn?'🔊':'🔇';if(sndOn)tone(660,.08)};
 btnPause.onclick=e=>{
@@ -703,7 +817,6 @@ btnPause.onclick=e=>{
 document.getElementById('btn-resume').onclick=()=>{if(!run)return;paused=false;show();last=0;requestAnimationFrame(loop)};
 document.getElementById('btn-restart').onclick=()=>startMode(mode);
 
-// 건강 도감 모달
 const B_DEX=['👾',...B];
 let dexFrom='start',dexTab='g';
 function renderDex(tab){
@@ -740,7 +853,6 @@ document.getElementById('tab-g').onclick=()=>renderDex('g');
 document.getElementById('tab-b').onclick=()=>renderDex('b');
 document.getElementById('btn-dex-close').onclick=()=>show(dexFrom);
 
-// PWA 설치 제어
 let deferredPrompt=null;
 const btnPwa=document.getElementById('btn-pwa');
 const isStandalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
@@ -762,14 +874,13 @@ btnPwa.onclick=async()=>{
 };
 document.getElementById('btn-pwa-close').onclick=()=>show('start');
 
-// 결과 공유하기
 function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hide');
   clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.add('hide'),2200);
 }
 document.getElementById('btn-share').onclick=async()=>{
-  const modeNames={catch:'건강 바구니',shoot:'대장 수호 슈팅',sort:'초스피드 판별'};
-  const txt=`🌿 [튼튼 대장 지키기 - ${modeNames[mode]}]\n점수: ${score}점 (${getRank(score)})\n🔥 최대 콤보: ${maxCombo} | 🏆 최고 기록: ${getModeBest()}점\n대장암 예방 미니게임 3종에 도전해보세요!`;
+  const modeNames={catch:'떨어지는 게임',shoot:'슈팅 게임',sort:'OX 스피드 게임',whack:'용종 터치 게임'};
+  const txt=`🌿 [튼튼 대장 지키기 - ${modeNames[mode]}]\n점수: ${score}점 (${getRank(score)})\n🔥 최대 콤보: ${maxCombo} | 🏆 최고 기록: ${getModeBest()}점\n대장암 예방 미니게임 4종에 도전해보세요!`;
   if(navigator.share){
     try{await navigator.share({title:'튼튼 대장 지키기',text:txt,url:location.href});return}catch(e){}
   }
@@ -796,15 +907,26 @@ const tm=e=>{
     if(e.type==='touchstart')judgeSort(t.clientX>=W/2);
     return;
   }
+  if(mode==='whack'){
+    if(e.type==='touchstart')tapWhack(t.clientX,t.clientY);
+    return;
+  }
   if(p){p.x=t.clientX;tY=t.clientY}
 };
 c.addEventListener('touchstart',tm,{passive:false});
 c.addEventListener('touchmove',tm,{passive:false});
 const te=e=>{if(!e.touches.length)tY=null};
 c.addEventListener('touchend',te);c.addEventListener('touchcancel',te);
-c.addEventListener('mousemove',e=>{if(p&&!paused&&mode!=='sort')p.x=e.clientX});
-c.addEventListener('mousedown',e=>{if(run&&!paused&&mode==='sort')judgeSort(e.clientX>=W/2)});
+c.addEventListener('mousemove',e=>{if(p&&!paused&&mode!=='sort'&&mode!=='whack')p.x=e.clientX});
+c.addEventListener('mousedown',e=>{
+  if(!run||paused)return;
+  if(mode==='sort')judgeSort(e.clientX>=W/2);
+  else if(mode==='whack')tapWhack(e.clientX,e.clientY);
+});
 c.addEventListener('contextmenu',e=>e.preventDefault());
+if("caches" in window){
+  caches.keys().then(ks=>ks.forEach(k=>{if(k!=='daejang-v16')caches.delete(k)})).catch(()=>{});
+}
 if("serviceWorker" in navigator){
   let refreshing=false;
   navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!refreshing){refreshing=true;location.reload()}});
