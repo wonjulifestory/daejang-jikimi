@@ -1,6 +1,6 @@
 # 대장 지킴이 (튼튼 대장 지키기) — 개발 명세서 (Codex용)
 
-> 이 문서는 현재 배포된 최종 코드(index.html / sw.js / manifest.json, 캐시 `daejang-v11`)를 그대로 읽고 정리한 것입니다. 숫자는 모두 실제 코드 값입니다.
+> 이 문서는 현재 배포된 최종 코드(index.html / sw.js / manifest.json, 캐시 `daejang-v12`)를 그대로 읽고 정리한 것입니다. 숫자는 모두 실제 코드 값입니다.
 
 ---
 
@@ -13,7 +13,7 @@
 - 문서의 화면 배치, 조작, 규칙, 아이템 목록, 문구, 색상, 숫자를 정확히 지켜줘
 - 한국 배는 문서의 SVG 원본을 base64 data URI로 넣어서 그려줘
 - 화면 크기 규칙(7장)과 테스트 목록(10장)을 모두 통과하게 해줘
-- 파일을 바꿀 때마다 sw.js 캐시 이름 숫자를 1씩 올려줘 (현재 daejang-v11 → 다음은 daejang-v12)
+- 파일을 바꿀 때마다 sw.js 캐시 이름 숫자를 1씩 올려줘 (현재 daejang-v12 → 다음은 daejang-v13)
 기존 기능을 늘릴 때도 이 문서의 규칙을 깨지 말고, 바뀐 내용은 이 문서에도 반영해줘.
 ```
 
@@ -175,12 +175,26 @@
   - icons: icon-192.png(192×192), icon-512.png(512×512), purpose "any maskable"
 - **index.html head**: `<link rel="icon" href="icon-192.png">`, `<link rel="manifest">`, `<meta name="theme-color" content="#2e7d32">`, `<link rel="apple-touch-icon" href="icon-192.png">`. 페이지 load 후 `navigator.serviceWorker.register("sw.js")`
 - **sw.js**
-  - 캐시 이름 `C='daejang-vN'` (현재 v11)
+  - 캐시 이름 `C='daejang-vN'` (현재 v12)
   - 캐시할 파일 `['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png']`
   - install: 위 파일을 캐시에 넣고 `skipWaiting()`
   - activate: 이름이 다른 캐시를 지우고 `clients.claim()`
   - fetch: 캐시에 있으면 캐시에서, 없으면 네트워크에서
 - **규칙**: 파일을 하나라도 바꾸면 캐시 이름 숫자를 반드시 1 올립니다. 안 올리면 설치된 앱이 옛 버전을 계속 보여줍니다. 이미 설치한 사람은 앱을 한두 번 껐다 켜야 새 버전이 나옵니다.
+
+## 12-1. v12 고도화 기능 (1등 앱 업그레이드)
+- **콤보 및 하트 회복 시스템**:
+  - 좋은 아이템을 연속으로 받을 때마다 `combo`가 1씩 증가하며, 2콤보 이상일 때 바구니 아래에 `🔥 N COMBO` 배지를 표시합니다.
+  - **10콤보 달성(`combo % 10 === 0`)**: 잃은 하트가 있으면(`hp < 5`) 하트를 1개 회복(`hp++`)하고 바구니 크기도 함께 회복되며 `'💚 10콤보! 하트 회복!'` 팝업이 뜹니다.
+  - 나쁜 아이템을 받으면 `combo = 0`으로 초기화됩니다.
+- **대장 건강·발암 도감 (`#dex`)**:
+  - 세계암연구기금(WCRF)과 국제암연구소(IARC) 근거를 바탕으로 좋은 습관 16종과 피할 습관 15종 각각의 과학적 근거 등급 및 상세 설명, 누적 수집 횟수를 확인할 수 있습니다.
+- **Web Audio API 효과음 및 진동 피드백**:
+  - 외부 음원 파일 없이 `AudioContext` 합성음으로 좋은 아이템 획득(콤보에 따라 음정 상승), 나쁜 아이템 획득(경고음 + 모바일 진동), 레벨업/10콤보 달성(팡파르), 게임 오버 사운드를 재생합니다.
+  - 상단 HUD의 `🔊/🔇` 버튼(`#btn-snd`)으로 소리를 켜고 끌 수 있으며, `⏸️` 버튼(`#btn-pause`) 또는 `Escape` 키로 일시정지할 수 있습니다.
+- **시각 연출 및 기록 저장 (`localStorage`)**:
+  - 배경 구름·언덕 애니메이션, 아이템 후광, 획득 시 파티클 폭발(`parts`), 바구니 탄성 애니메이션(`bScale`), 나쁜 아이템 충돌 시 화면 흔들림(`shake`) 및 붉은 플래시(`badFlash`), 조작 띠 내 실시간 바구니 위치 트랙 표시기를 그립니다.
+  - `localStorage`(`daejang_save_v12`)에 최고 점수(`best`), 최고 콤보(`maxCombo`), 도감 수집 현황(`dex`)을 영구 저장하며, 게임 종료 시 점수 등급 칭호(`🌱 새싹 대장 지킴이` ~ `👑 전설의 대장 수호신`)와 결과 공유(`navigator.share` 및 클립보드 복사)를 지원합니다.
 
 ## 13. 배포
 - **GitHub Pages**: 저장소 `wonjulifestory/daejang-jikimi`, `main` 브랜치 루트 → https://wonjulifestory.github.io/daejang-jikimi/

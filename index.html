@@ -1,38 +1,480 @@
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<link rel="icon" href="icon-192.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2e7d32"><link rel="apple-touch-icon" href="icon-192.png"><title>튼튼 대장 지키기</title><style>
+<link rel="icon" href="icon-192.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2e7d32"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="대장 지킴이"><link rel="apple-touch-icon" href="icon-192.png"><title>튼튼 대장 지키기</title><style>
 *{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden;position:fixed;inset:0;-webkit-text-size-adjust:100%;text-size-adjust:100%}body{font-family:system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:linear-gradient(#a8e6cf,#dcedc1);touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
-#hud{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:10px 14px;font-weight:700;font-size:18px;z-index:2;background:rgba(255,255,255,.6)}
-canvas{display:block;touch-action:none;position:fixed;left:0;top:0;width:100%;height:100%;z-index:1}#hud{pointer-events:none}.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(0,0,0,.45)}
-.card{background:#fff;border-radius:20px;padding:24px;max-width:440px;width:92%;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.3);max-height:90vh;overflow:auto}
-h1{color:#2e7d32;margin-bottom:10px}h2{color:#c2185b;margin-bottom:10px}p,li{line-height:1.6;margin:6px 0}ul{text-align:left;padding-left:20px}
-button{font-size:18px;padding:12px 22px;border:0;border-radius:12px;background:#ff8a65;color:#fff;font-weight:700;margin-top:12px;cursor:pointer}
-.opt{display:block;width:100%;background:#4fc3f7;margin-top:8px;font-size:16px}.ok{background:#66bb6a!important}.no{background:#e57373!important}.hide{display:none}
+#hud{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;font-weight:700;font-size:18px;z-index:2;background:rgba(255,255,255,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 2px 10px rgba(0,0,0,.06);pointer-events:none}
+.hud-l,.hud-r{display:flex;align-items:center;gap:8px}
+.pill{background:rgba(46,125,50,.12);color:#1b5e20;padding:3px 9px;border-radius:999px;font-size:13px;font-weight:800;display:inline-flex;align-items:center;gap:4px}
+.pill.gold{background:rgba(255,179,0,.2);color:#bf360c}
+.icon-btn{pointer-events:auto;background:rgba(255,255,255,.88);border:1px solid rgba(46,125,50,.25);border-radius:10px;padding:4px 8px;font-size:16px;line-height:1;cursor:pointer;margin:0;color:#2e7d32;box-shadow:0 2px 5px rgba(0,0,0,.08);transition:transform .12s}
+.icon-btn:active{transform:scale(.92)}
+canvas{display:block;touch-action:none;position:fixed;left:0;top:0;width:100%;height:100%;z-index:1}
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(0,0,0,.48);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);padding:12px}
+.card{background:#fff;border-radius:22px;padding:22px 20px;max-width:440px;width:94%;text-align:center;box-shadow:0 12px 36px rgba(0,0,0,.32);max-height:90vh;overflow:auto;animation:popIn .22s cubic-bezier(.2,.9,.3,1)}
+@keyframes popIn{from{opacity:0;transform:scale(.93) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+h1{color:#2e7d32;margin-bottom:8px;font-size:26px;letter-spacing:-.5px}h2{color:#c2185b;margin:12px 0 8px;font-size:18px}p,li{line-height:1.55;margin:6px 0;color:#263238;font-size:15px}ul{text-align:left;padding-left:20px;background:#f1f8e9;border-radius:14px;padding:12px 14px 12px 30px;margin:8px 0}
+button{font-size:18px;padding:12px 22px;border:0;border-radius:12px;background:linear-gradient(135deg,#ff8a65,#ff7043);color:#fff;font-weight:700;margin-top:10px;cursor:pointer;box-shadow:0 4px 12px rgba(255,112,67,.35);transition:transform .12s,box-shadow .12s}
+button:active{transform:scale(.96)}
+.btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.btn-row button{margin-top:0;flex:1;min-width:110px}
+.btn-sub{background:linear-gradient(135deg,#43a047,#2e7d32);box-shadow:0 4px 12px rgba(46,125,50,.28);font-size:16px;padding:11px 14px}
+.btn-pwa{background:linear-gradient(135deg,#1e88e5,#1565c0);box-shadow:0 4px 12px rgba(21,101,192,.28);font-size:15px;padding:10px 14px;width:100%;margin-top:8px}
+.btn-ghost{background:#eceff1;color:#37474f;box-shadow:none;font-size:16px;padding:11px 14px}
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:#f1f8e9;border:1px solid #c5e1a5;border-radius:14px;padding:10px 8px;margin:10px 0}
+.stat-box{display:flex;flex-direction:column;align-items:center;font-size:12px;color:#558b2f;font-weight:600}
+.stat-box b{font-size:17px;color:#1b5e20;margin-top:2px}
+.tip-banner{background:linear-gradient(90deg,#e8f5e9,#fffde7);border-left:4px solid #43a047;border-radius:10px;padding:8px 12px;font-size:13.5px;color:#2e7d32;font-weight:700;margin:8px 0;text-align:left}
+.rank-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#fff8e1,#ffe082);color:#e65100;border:2px solid #ffb300;border-radius:999px;padding:6px 16px;font-weight:800;font-size:16px;margin:4px 0 6px;box-shadow:0 3px 10px rgba(255,179,0,.22)}
+.new-rec{display:inline-block;background:#d32f2f;color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:999px;margin-left:6px;vertical-align:middle}
+.tabs{display:flex;gap:6px;margin:10px 0}
+.tab{flex:1;padding:9px;border-radius:10px;background:#eceff1;color:#455a64;font-size:14px;font-weight:700;margin:0;box-shadow:none}
+.tab.active.good{background:#2e7d32;color:#fff}
+.tab.active.bad{background:#c62828;color:#fff}
+.dex-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;max-height:36vh;overflow-y:auto;padding:4px}
+.dex-item{background:#f9fbe7;border:2px solid #dce775;border-radius:12px;padding:7px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;position:relative;transition:transform .1s}
+.dex-item.bad{background:#ffebee;border-color:#ef9a9a}
+.dex-item.sel{outline:3px solid #ff7043;transform:scale(1.03)}
+.dex-item .em{font-size:28px;line-height:1.1;height:32px;display:flex;align-items:center;justify-content:center}
+.dex-item .nm{font-size:11px;font-weight:700;color:#263238;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.dex-item .cnt{font-size:10px;color:#558b2f;font-weight:700}
+.dex-item.bad .cnt{color:#c62828}
+.dex-detail{background:#f5f5f5;border-radius:14px;padding:11px 13px;text-align:left;margin-top:8px;min-height:74px;border:1px solid #e0e0e0}
+.dex-detail .dt-head{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:15px;color:#1b5e20;margin-bottom:4px}
+.dex-detail.bad .dt-head{color:#b71c1c}
+.dex-detail .grade{font-size:11px;padding:2px 8px;border-radius:999px;background:#c8e6c9;color:#1b5e20}
+.dex-detail.bad .grade{background:#ffcdd2;color:#b71c1c}
+.pwa-box{background:#e3f2fd;border:1px solid #90caf9;border-radius:14px;padding:12px 14px;text-align:left;margin:10px 0;font-size:14px;color:#0d47a1}
+.pwa-box b{color:#1565c0}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(38,50,56,.92);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;font-weight:700;z-index:20;pointer-events:none;transition:opacity .25s}
+.opt{display:block;width:100%;background:#4fc3f7;margin-top:8px;font-size:16px}.ok{background:#66bb6a!important}.no{background:#e57373!important}.hide{display:none!important}
 </style></head><body>
-<div id="hud"><span>⭐ <b id="sc">0</b></span><span id="hp">❤️❤️❤️❤️❤️</span></div>
+<div id="hud">
+  <div class="hud-l">
+    <span>⭐ <b id="sc">0</b></span>
+    <span class="pill gold" title="최고 점수">🏆 <b id="bs_ui">0</b></span>
+    <span class="pill" title="현재 단계">LV.<b id="lv_ui">1</b></span>
+  </div>
+  <div class="hud-r">
+    <span id="hp">❤️❤️❤️❤️❤️</span>
+    <button id="btn-snd" class="icon-btn" aria-label="소리 켜기/끄기">🔊</button>
+    <button id="btn-pause" class="icon-btn" aria-label="일시정지">⏸️</button>
+  </div>
+</div>
 <canvas id="c"></canvas>
-<div id="start" class="screen"><div class="card"><h1>🌿 튼튼 대장 지키기</h1><p>바구니 🧺를 좌우로 움직여<br>건강한 음식과 습관을 받으세요!</p>
-<p>🥦🥬🍅🍎🍇🌾🍐🏃 등 채소·과일·통곡물·운동은 +5점<br>🌭🥓🥩🍔🍟🍩🍺🥃🚬🥤 등 가공육·기름진 음식·단 음식·술·담배는 -5점 & 바구니가 작아져요</p><p>⌨️ ←/→ 키 · 📱 터치/마우스로 이동</p><button id="go">시작하기</button></div></div>
-<div id="over" class="screen hide"><div class="card"><h1>게임 종료!</h1><p style="font-size:22px">점수: <b id="fs"></b></p><h2>대장암 예방 수칙</h2><ul>
-<li>🥦 채소·과일·통곡물로 식이섬유 충분히</li><li>🥩 붉은 고기는 적당히, 가공육은 줄이기</li><li>🏃 규칙적인 신체활동 (주 150분 이상)</li><li>🚭 금연, 🍺 절주</li><li>⚖️ 적정 체중 유지</li><li>🩺 만 50세 이상: 매년 분변잠혈검사(국가 암검진), 이상 시 대장내시경</li></ul><button id="re">다시 하기</button></div></div>
+
+<div id="start" class="screen"><div class="card">
+  <h1>🌿 튼튼 대장 지키기</h1>
+  <p>바구니 🧺를 좌우로 움직여<br>건강한 음식과 습관을 받으세요!</p>
+  <div class="stats-bar">
+    <div class="stat-box"><span>🏆 최고 점수</span><b id="st-best">0</b></div>
+    <div class="stat-box"><span>🔥 최고 콤보</span><b id="st-combo">0</b></div>
+    <div class="stat-box"><span>📖 도감 수집</span><b id="st-dex">0/31</b></div>
+  </div>
+  <p>🥦🥬🍅🍎🍇🌾🍐🏃 등 채소·과일·통곡물·운동은 +5점<br>🌭🥓🥩🍔🍟🍩🍺🥃🚬🥤 등 가공육·기름진 음식·단 음식·술·담배는 -5점 & 바구니가 작아져요</p>
+  <div class="tip-banner">💡 연속 10콤보 달성 시 잃어버린 하트(❤️)가 1개 회복돼요!</div>
+  <p style="font-size:13.5px;color:#546e7a">⌨️ ←/→ 키 · 📱 터치/마우스로 이동</p>
+  <div class="btn-row">
+    <button id="go">시작하기</button>
+    <button id="btn-dex" class="btn-sub">📖 건강 도감</button>
+  </div>
+  <button id="btn-pwa" class="btn-pwa">📲 휴대폰 앱으로 설치하기 (PWA)</button>
+</div></div>
+
+<div id="over" class="screen hide"><div class="card">
+  <h1>게임 종료!</h1>
+  <div id="rk-badge" class="rank-badge">🌱 새싹 대장 지킴이</div>
+  <p style="font-size:22px">점수: <b id="fs">0</b><span id="new-rec" class="new-rec hide">신기록!</span></p>
+  <div class="stats-bar">
+    <div class="stat-box"><span>🏆 최고 점수</span><b id="best-fs">0</b></div>
+    <div class="stat-box"><span>🔥 최대 콤보</span><b id="mc-fs">0</b></div>
+    <div class="stat-box"><span>🧺 건강 획득</span><b id="gc-fs">0개</b></div>
+  </div>
+  <h2>대장암 예방 수칙</h2><ul>
+  <li>🥦 채소·과일·통곡물로 식이섬유 충분히</li><li>🥩 붉은 고기는 적당히, 가공육은 줄이기</li><li>🏃 규칙적인 신체활동 (주 150분 이상)</li><li>🚭 금연, 🍺 절주</li><li>⚖️ 적정 체중 유지</li><li>🩺 만 50세 이상: 매년 분변잠혈검사(국가 암검진), 이상 시 대장내시경</li></ul>
+  <div class="btn-row">
+    <button id="re">다시 하기</button>
+    <button id="btn-share" class="btn-sub">📤 결과 공유</button>
+    <button id="btn-dex2" class="btn-ghost">📖 도감</button>
+  </div>
+</div></div>
+
+<div id="pause" class="screen hide"><div class="card">
+  <h1>⏸️ 일시정지</h1>
+  <p>잠시 쉬어가는 시간입니다.<br>규칙적인 휴식과 운동도 대장 건강에 좋아요!</p>
+  <div class="btn-row">
+    <button id="btn-resume">계속하기</button>
+    <button id="btn-restart" class="btn-ghost">처음부터</button>
+  </div>
+</div></div>
+
+<div id="dex" class="screen hide"><div class="card">
+  <h1>📖 대장 건강·발암 도감</h1>
+  <p style="font-size:13px;color:#546e7a">세계암연구기금(WCRF) · 국제암연구소(IARC) 근거 기준</p>
+  <div class="tabs">
+    <button id="tab-g" class="tab active good">🌿 좋은 습관 (16)</button>
+    <button id="tab-b" class="tab bad">⚠️ 피할 습관 (15)</button>
+  </div>
+  <div id="dex-grid" class="dex-grid"></div>
+  <div id="dex-detail" class="dex-detail"></div>
+  <button id="btn-dex-close" style="width:100%;margin-top:10px">닫기</button>
+</div></div>
+
+<div id="pwa-modal" class="screen hide"><div class="card">
+  <h1>📲 앱으로 설치하기</h1>
+  <p>홈 화면에 추가하면 인터넷 없이도 언제든<br><b>전체 화면 앱</b>으로 즐길 수 있어요!</p>
+  <div class="pwa-box">
+    <b>🍎 아이폰 / 아이패드 (Safari)</b><br>
+    1. 브라우저 하단의 <b>공유 버튼 [⬆️]</b> 터치<br>
+    2. 메뉴를 내려 <b>「홈 화면에 추가」</b> 선택<br>
+    3. 우측 상단 <b>「추가」</b> 터치
+  </div>
+  <div class="pwa-box">
+    <b>🤖 안드로이드 (Chrome / 삼성 인터넷)</b><br>
+    1. 브라우저 우측 상단(또는 하단) <b>메뉴 [⋮] / [≡]</b> 터치<br>
+    2. <b>「앱 설치」</b> 또는 <b>「홈 화면에 추가」</b> 선택
+  </div>
+  <button id="btn-pwa-close" style="width:100%;margin-top:8px">확인</button>
+</div></div>
+
+<div id="toast" class="hide"></div>
+
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d');let W,H,DPR,p;function rs(){const r=c.getBoundingClientRect(),w=Math.round(r.width)||document.documentElement.clientWidth,h=Math.round(r.height)||document.documentElement.clientHeight,d=Math.min(window.devicePixelRatio||1,3);if(w===W&&h===H&&d===DPR)return;W=w;H=h;DPR=d;c.width=Math.round(w*d);c.height=Math.round(h*d);x.setTransform(d,0,0,d,0,0);if(p)p.x=Math.max(35,Math.min(W-35,p.x))}rs();let rsq=0;const rsl=()=>{if(!rsq){rsq=1;requestAnimationFrame(()=>{rsq=0;rs()})}};addEventListener('resize',rsl);addEventListener('orientationchange',()=>setTimeout(rs,250));['gesturestart','gesturechange','gestureend','dblclick'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
 const G=['🥦','🥕','🍎','🍌','🍠','🌾','🥬','🍅','🍇','🍓','🥒','🌽','🍐','🥝','🍊','🏃'],B=['🌭','🥓','🥩','🍺','🚬','🍟','🍔','🍕','🍩','🧁','🍷','🥃','🍖','🥤','🍰'];
-const PEAR=new Image();PEAR.onload=()=>PEAR.ok=1;PEAR.src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImciIGN4PSIzOCUiIGN5PSIzNSUiIHI9IjcwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZjdkNThhIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiNkOWEwNGEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNhODY5MmEiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48cGF0aCBkPSJNNTAgMjZDMzAgMjIgMTAgMzQgMTAgNThDMTAgODAgMjggOTQgNTAgOTRDNzIgOTQgOTAgODAgOTAgNThDOTAgMzQgNzAgMjIgNTAgMjZaIiBmaWxsPSJ1cmwoI2cpIiBzdHJva2U9IiM4YTU0MjAiIHN0cm9rZS13aWR0aD0iMiIvPjxnIGZpbGw9IiNmYmU5YzAiIG9wYWNpdHk9Ii44NSI+PGNpcmNsZSBjeD0iMzAiIGN5PSI1MCIgcj0iMS42Ii8+PGNpcmNsZSBjeD0iNDIiIGN5PSI0MCIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iNTgiIGN5PSI0NCIgcj0iMS41Ii8+PGNpcmNsZSBjeD0iNzAiIGN5PSI1NiIgcj0iMS42Ii8+PGNpcmNsZSBjeD0iMjUiIGN5PSI2NiIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iNDAiIGN5PSI2MiIgcj0iMS41Ii8+PGNpcmNsZSBjeD0iNTUiIGN5PSI3MCIgcj0iMS42Ii8+PGNpcmNsZSBjeD0iNzIiIGN5PSI3NCIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iMzUiIGN5PSI4MCIgcj0iMS41Ii8+PGNpcmNsZSBjeD0iNjIiIGN5PSI4NCIgcj0iMS4zIi8+PGNpcmNsZSBjeD0iODAiIGN5PSI2NCIgcj0iMS4zIi8+PGNpcmNsZSBjeD0iNDgiIGN5PSI1MiIgcj0iMS4yIi8+PGNpcmNsZSBjeD0iMjAiIGN5PSI1NiIgcj0iMS4yIi8+PGNpcmNsZSBjeD0iNjYiIGN5PSIzNCIgcj0iMS4yIi8+PC9nPjxlbGxpcHNlIGN4PSIzNCIgY3k9IjQ0IiByeD0iOSIgcnk9IjYiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii4zNSIgdHJhbnNmb3JtPSJyb3RhdGUoLTMwIDM0IDQ0KSIvPjxwYXRoIGQ9Ik01MCAzMFE0OSAxOCA1NCAxMCIgc3Ryb2tlPSIjNmIzZTE3IiBzdHJva2Utd2lkdGg9IjUiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik01NCAxNlE2OCA0IDgyIDEyUTcwIDI0IDU0IDE2WiIgZmlsbD0iIzVjYjg1YyIgc3Ryb2tlPSIjM2Q4YjNkIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxwYXRoIGQ9Ik01NiAxNVE2OCAxMSA3OCAxMiIgc3Ryb2tlPSIjM2Q4YjNkIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiLz48L3N2Zz4=";function di(e,cx,cy,sz){if(e==='🍐'&&PEAR.ok)x.drawImage(PEAR,cx-sz/2,cy-sz/2,sz,sz);else x.fillText(e,cx,cy)}
+const PEAR_SRC="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImciIGN4PSIzOCUiIGN5PSIzNSUiIHI9IjcwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZjdkNThhIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiNkOWEwNGEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNhODY5MmEiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48cGF0aCBkPSJNNTAgMjZDMzAgMjIgMTAgMzQgMTAgNThDMTAgODAgMjggOTQgNTAgOTRDNzIgOTQgOTAgODAgOTAgNThDOTAgMzQgNzAgMjIgNTAgMjZaIiBmaWxsPSJ1cmwoI2cpIiBzdHJva2U9IiM4YTU0MjAiIHN0cm9rZS13aWR0aD0iMiIvPjxnIGZpbGw9IiNmYmU5YzAiIG9wYWNpdHk9Ii44NSI+PGNpcmNsZSBjeD0iMzAiIGN5PSI1MCIgcj0iMS42Ii8+PGNpcmNsZSBjeD0iNDIiIGN5PSI0MCIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iNTgiIGN5PSI0NCIgcj0iMS41Ii8+PGNpcmNsZSBjeD0iNzAiIGN5PSI1NiIgcj0iMS42Ii8+PGNpcmNsZSBjeD0iMjUiIGN5PSI2NiIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iNDAiIGN5PSI2MiIgcj0iMS41Ii8+PGNpcmNsZSBjeD0iNTUiIGN5PSI3MCIgcj0iMS42Ii8+PGNpcmNsZSBjeD0iNzIiIGN5PSI3NCIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iMzUiIGN5PSI4MCIgcj0iMS41Ii8+PGNpcmNsZSBjeD0iNjIiIGN5PSI4NCIgcj0iMS4zIi8+PGNpcmNsZSBjeD0iODAiIGN5PSI2NCIgcj0iMS4zIi8+PGNpcmNsZSBjeD0iNDgiIGN5PSI1MiIgcj0iMS4yIi8+PGNpcmNsZSBjeD0iMjAiIGN5PSI1NiIgcj0iMS4yIi8+PGNpcmNsZSBjeD0iNjYiIGN5PSIzNCIgcj0iMS4yIi8+PC9nPjxlbGxpcHNlIGN4PSIzNCIgY3k9IjQ0IiByeD0iOSIgcnk9IjYiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii4zNSIgdHJhbnNmb3JtPSJyb3RhdGUoLTMwIDM0IDQ0KSIvPjxwYXRoIGQ9Ik01MCAzMFE0OSAxOCA1NCAxMCIgc3Ryb2tlPSIjNmIzZTE3IiBzdHJva2Utd2lkdGg9IjUiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik01NCAxNlE2OCA0IDgyIDEyUTcwIDI0IDU0IDE2WiIgZmlsbD0iIzVjYjg1YyIgc3Ryb2tlPSIjM2Q4YjNkIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxwYXRoIGQ9Ik01NiAxNVE2OCAxMSA3OCAxMiIgc3Ryb2tlPSIjM2Q4YjNkIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiLz48L3N2Zz4=";
+const PEAR=new Image();PEAR.onload=()=>PEAR.ok=1;PEAR.src=PEAR_SRC;
+function di(e,cx,cy,sz){if(e==='🍐'&&PEAR.ok)x.drawImage(PEAR,cx-sz/2,cy-sz/2,sz,sz);else x.fillText(e,cx,cy)}
 
-let stack=[],pops=[],items,score,hp,run,next,qi,keys={},t0,sp;
-function reset(){p={x:W/2,w:70};items=[];stack=[];pops=[];score=0;hp=5;next=30;sp=1;hud()}
-function bs(){return .4+.12*hp}function hud(){sc.textContent=score;document.getElementById('hp').textContent='❤️'.repeat(hp)+'🤍'.repeat(5-hp)}
-function spawn(){const g=Math.random()<.6;items.push({e:(g?G:B)[Math.random()*(g?G:B).length|0],g,x:40+Math.random()*(W-80),y:-45,v:(2+Math.random()*2)*sp})}
-let last=0,acc=0;function loop(t){if(!run)return;const dt=Math.min(50,t-(last||t));last=t;acc+=dt;if(acc>Math.max(350,800-score*4)){acc=0;spawn()}
-if(keys.ArrowLeft)p.x-=8;if(keys.ArrowRight)p.x+=8;p.x=Math.max(35,Math.min(W-35,p.x));x.clearRect(0,0,W,H);
-x.font='66px serif';x.textAlign='center';x.textBaseline='middle';const CZ=H*.75,py=CZ-45;
-for(let i=items.length-1;i>=0;i--){const o=items[i];o.y+=o.v*dt/16;di(o.e,o.x,o.y,80);
-if(o.y>py-45&&o.y<py+25&&Math.abs(o.x-p.x)<p.w*bs()/2+27){items.splice(i,1);if(o.g){score+=5;stack.push(o.e);if(stack.length>6)stack.shift();pops.push({t:'+5',c:'#2e7d32',x:o.x,y:o.y,a:1})}else{score=Math.max(0,score-5);hp--;pops.push({t:'-5 바구니 축소!',c:'#d32f2f',x:o.x,y:o.y,a:1})}hud();if(hp<=0)return end();if(score>=next){next+=30;sp+=.15}}else if(o.y>CZ+10)items.splice(i,1)}
-x.fillStyle=tY!==null?'rgba(46,125,50,.28)':'rgba(46,125,50,.15)';x.fillRect(0,CZ,W,H-CZ);x.fillStyle='rgba(46,125,50,.5)';x.fillRect(0,CZ,W,3);x.fillStyle='#2e7d32';x.font='bold 17px sans-serif';x.fillText('👈  여기를 터치해서 움직이세요  👉',W/2,CZ+(H-CZ)/2);x.font='13px sans-serif';x.fillStyle='rgba(46,125,50,.7)';x.fillText('좌우로 드래그',W/2,CZ+(H-CZ)/2+24);const k=bs();x.font=(56*k|0)+'px serif';x.fillText('🧺',p.x,py);x.font=(22*k|0)+'px serif';stack.forEach((e,i)=>di(e,p.x+((i%3)-1)*18*k,py-14*k-(i/3|0)*14*k,27*k));for(let i=pops.length-1;i>=0;i--){const q=pops[i];q.y-=1.2*dt/16;q.a-=.02*dt/16;if(q.a<=0){pops.splice(i,1);continue}x.globalAlpha=q.a;x.font='bold 28px sans-serif';x.fillStyle=q.c;x.fillText(q.t,q.x,q.y);x.globalAlpha=1}requestAnimationFrame(loop)}
-function start(){reset();show();run=true;last=0;requestAnimationFrame(loop)}
-function show(id){['start','over'].forEach(s=>document.getElementById(s).classList.toggle('hide',s!==id))}
-function end(){run=false;fs.textContent=score;show('over')}
+const INFO={
+  '🥦':['브로콜리','식이섬유·항산화','풍부한 식이섬유와 설포라판이 장내 환경을 건강하게 지킵니다.'],
+  '🥕':['당근','식이섬유·베타카로틴','장 운동을 돕는 식이섬유가 풍부한 대표 녹황색 채소입니다.'],
+  '🍎':['사과','수용성 식이섬유(펙틴)','장내 유익균을 늘리는 펙틴이 풍부해 배변 활동을 돕습니다.'],
+  '🍌':['바나나','프리바이오틱스·섬유질','소화가 잘되고 장내 유익균의 먹이가 되는 식이섬유를 공급합니다.'],
+  '🍠':['고구마','불용성 식이섬유','장 통과 시간을 단축시켜 발암물질과 장 점막의 접촉을 줄입니다.'],
+  '🌾':['통곡물','WCRF 예방 근거 꽤 있음','정제하지 않은 곡류는 대장암 위험을 낮춘다는 과학적 근거가 탄탄합니다.'],
+  '🥬':['잎채소(배추·상추)','식이섬유·엽산','부피감을 주고 장의 연동운동을 촉진해 변비와 대장질환을 예방합니다.'],
+  '🍅':['토마토','식이섬유·라이코펜','수분과 식이섬유, 항산화 성분이 풍부한 건강 채소입니다.'],
+  '🍇':['포도','식이섬유·폴리페놀','과일 속 섬유소와 식물성 생리활성 물질이 장 건강을 돕습니다.'],
+  '🍓':['딸기','비타민C·식이섬유','낮은 칼로리와 풍부한 섬유질로 건강한 간식 습관을 만듭니다.'],
+  '🥒':['오이','수분·식이섬유','풍부한 수분과 아삭한 섬유질이 장 속 노폐물 배출을 돕습니다.'],
+  '🌽':['옥수수','불용성 식이섬유','통곡물·채소류로서 대변 부피를 늘려 장 운동을 활발하게 합니다.'],
+  '🍐':['한국 배(신고배)','석세포·식이섬유','우리나라 배 특유의 오돌토돌한 석세포(리그닌·펜토산)가 장 청소를 돕습니다.'],
+  '🥝':['키위','식이섬유·액티니딘','소화 효소와 수용성·불용성 식이섬유가 고루 들어 있습니다.'],
+  '🍊':['귤·감귤류','펙틴·비타민','속껍질에 풍부한 펙틴 성분이 대장 운동을 부드럽게 돕습니다.'],
+  '🏃':['규칙적 운동','WCRF 예방 근거 확실','신체활동(주 150분 이상)은 대장암 위험을 낮춘다는 근거가 가장 확실합니다!'],
+  '🌭':['소시지·핫도그','IARC 1군 발암물질','가공육은 국제암연구소(IARC)가 지정한 1군 발암물질로 섭취를 줄여야 합니다.'],
+  '🥓':['베이컨·햄','IARC 1군 발암물질','아질산염 등 가공 과정의 성분이 대장 점막 손상과 암 위험을 높입니다.'],
+  '🥩':['붉은 고기(소·돼지)','IARC 2A군 발암 추정','과도한 붉은 고기 섭취는 헴철·고온조리 물질을 통해 대장암 위험을 높입니다.'],
+  '🍖':['양념·구운 육류','IARC 2A군·고온조리','직화·고온 조리된 육류는 발암 물질(헤테로사이클릭아민 등) 생성 위험이 큽니다.'],
+  '🍺':['맥주','IARC 1군 발암물질(알코올)','알코올 대사산물인 아세트알데히드는 대장암 위험을 확실하게 높입니다.'],
+  '🍷':['와인','IARC 1군 발암물질(알코올)','술의 종류와 관계없이 알코올 자체가 대장암의 확실한 위험 요인입니다.'],
+  '🥃':['독주·소주·양주','IARC 1군 발암물질(알코올)','과음과 잦은 음주는 대장 용종 및 대장암 발생률을 크게 높입니다.'],
+  '🚬':['담배(흡연)','IARC 1군 발암물질','흡연은 폐암뿐 아니라 대장 선종과 대장암 위험도 확실하게 증가시킵니다.'],
+  '🍟':['감자튀김','고지방·고열량(비만 위험)','기름진 튀김류 과다 섭취는 비만을 유발해 간접적으로 대장암 위험을 높입니다.'],
+  '🍔':['패스트푸드 버거','가공육·포화지방·고열량','붉은 고기·가공육 패티와 높은 열량이 복부비만과 장 염증을 유발합니다.'],
+  '🍕':['피자','가공육·고열량(비만 위험)','페퍼로니 등 가공육 토핑과 과도한 열량은 적정 체중 유지를 방해합니다.'],
+  '🍩':['도넛','정제당·트랜스지방','식이섬유가 부족하고 당분과 지방이 많아 체중 증가와 대사 이상을 부릅니다.'],
+  '🧁':['컵케이크·머핀','정제당·고칼로리','단 음식 과다 섭취는 인슐린 저항성과 비만을 통해 대장 건강을 해칩니다.'],
+  '🍰':['케이크','포화지방·액상과당','고열량 디저트 위주의 식습관은 장내 유익균을 줄이고 비만 위험을 높입니다.'],
+  '🥤':['가당 탄산음료','액상과당·비만 유발','설탕·액상과당 음료는 빠르게 체지방을 늘려 대장암 간접 위험을 높입니다.']
+};
+
+const STORE_KEY='daejang_save_v12';
+let save={best:0,maxCombo:0,dex:{}};
+try{const raw=localStorage.getItem(STORE_KEY);if(raw)save=Object.assign(save,JSON.parse(raw))}catch(e){}
+function persist(){try{localStorage.setItem(STORE_KEY,JSON.stringify(save))}catch(e){}}
+
+let sndOn=true,actx=null;
+function initAudio(){if(!actx&&typeof AudioContext!=='undefined')try{actx=new AudioContext()}catch(e){}if(actx&&actx.state==='suspended')actx.resume()}
+function tone(freq,dur,type='sine',vol=.12,delay=0){
+  if(!sndOn)return;initAudio();if(!actx)return;
+  try{
+    const t=actx.currentTime+delay,o=actx.createOscillator(),g=actx.createGain();
+    o.type=type;o.frequency.setValueAtTime(freq,t);
+    g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);
+    o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+dur);
+  }catch(e){}
+}
+function sfxGood(cb){const f=520+Math.min(cb,12)*32;tone(f,.09,'triangle',.13);tone(f*1.25,.12,'sine',.11,.05)}
+function sfxBad(){tone(190,.16,'sawtooth',.14);tone(135,.22,'square',.12,.08);if(navigator.vibrate)try{navigator.vibrate(45)}catch(e){}}
+function sfxLv(){[523,659,784,1046].forEach((f,i)=>tone(f,.13,'triangle',.12,i*.06))}
+function sfxOver(){[392,349,330,262].forEach((f,i)=>tone(f,.2,'sine',.12,i*.11))}
+
+let stack=[],pops=[],parts=[],items,score,hp,run=false,paused=false,next,qi,keys={},t0,sp,combo=0,maxCombo=0,goodCnt=0,bScale=1,shake=0,badFlash=0;
+const clouds=[{x:.15,y:.14,s:38,v:.012},{x:.55,y:.22,s:30,v:.008},{x:.82,y:.11,s:44,v:.01}];
+
+function getRank(s){
+  if(s>=400)return'👑 전설의 대장 수호신';
+  if(s>=250)return'🛡️ 대장 건강 박사';
+  if(s>=120)return'🏃 활력 대장 히어로';
+  if(s>=50)return'🥦 식이섬유 마스터';
+  return'🌱 새싹 대장 지킴이';
+}
+
+function updateStartStats(){
+  document.getElementById('st-best').textContent=save.best;
+  document.getElementById('st-combo').textContent=save.maxCombo;
+  const cnt=Object.keys(save.dex).filter(k=>save.dex[k]>0).length;
+  document.getElementById('st-dex').textContent=cnt+'/31';
+  document.getElementById('bs_ui').textContent=save.best;
+}
+updateStartStats();
+
+function reset(){
+  p={x:W/2,w:70};items=[];stack=[];pops=[];parts=[];
+  score=0;hp=5;next=30;sp=1;combo=0;maxCombo=0;goodCnt=0;bScale=1;shake=0;badFlash=0;paused=false;
+  hud();
+}
+function bs(){return .4+.12*hp}
+function hud(){
+  sc.textContent=score;
+  document.getElementById('hp').textContent='❤️'.repeat(hp)+'🤍'.repeat(5-hp);
+  document.getElementById('bs_ui').textContent=Math.max(save.best,score);
+  document.getElementById('lv_ui').textContent=Math.round((sp-1)/.15)+1;
+}
+function spawn(){
+  const g=Math.random()<.6;
+  const arr=g?G:B;
+  items.push({e:arr[Math.random()*arr.length|0],g,x:40+Math.random()*(W-80),y:-45,v:(2+Math.random()*2)*sp,ph:Math.random()*6.28});
+}
+function burst(cx,cy,good){
+  const cols=good?['#43a047','#fdd835','#81c784','#a5d6a7']:['#e53935','#ff8a65','#ef5350'];
+  for(let i=0;i<(good?10:8);i++){
+    const a=Math.random()*6.28,sp=1.5+Math.random()*3.5;
+    parts.push({x:cx,y:cy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1.5,r:3+Math.random()*4,c:cols[i%cols.length],a:1});
+  }
+}
+
+let last=0,acc=0;
+function loop(t){
+  if(!run||paused)return;
+  const dt=Math.min(50,t-(last||t));last=t;acc+=dt;
+  if(acc>Math.max(350,800-score*4)){acc=0;spawn()}
+  if(keys.ArrowLeft)p.x-=8;if(keys.ArrowRight)p.x+=8;
+  p.x=Math.max(35,Math.min(W-35,p.x));
+  x.clearRect(0,0,W,H);
+
+  const CZ=H*.75,py=CZ-45;
+
+  // 배경 구름과 언덕 연출
+  x.save();
+  x.fillStyle='rgba(255,255,255,.38)';
+  clouds.forEach(cl=>{
+    cl.x=(cl.x+cl.v*dt/1000)%1.15;
+    const cx=(cl.x-.07)*W,cy=cl.y*H,r=cl.s;
+    x.beginPath();x.arc(cx,cy,r,0,6.28);x.arc(cx+r*.7,cy+4,r*.75,0,6.28);x.arc(cx-r*.7,cy+5,r*.7,0,6.28);x.fill();
+  });
+  x.fillStyle='rgba(129,199,132,.25)';
+  x.beginPath();x.moveTo(0,CZ);x.quadraticCurveTo(W*.28,CZ-38,W*.58,CZ-10);x.quadraticCurveTo(W*.82,CZ-32,W,CZ);x.fill();
+  x.restore();
+
+  if(shake>0){shake=Math.max(0,shake-.6*dt/16)}
+  const sx=shake?((Math.random()-.5)*shake):0;
+  x.save();
+  if(sx)x.translate(sx,0);
+
+  x.textAlign='center';x.textBaseline='middle';
+  for(let i=items.length-1;i>=0;i--){
+    const o=items[i];o.y+=o.v*dt/16;
+    // 은은한 후광 표시
+    x.save();
+    x.beginPath();x.arc(o.x,o.y,36,0,6.28);
+    x.fillStyle=o.g?'rgba(255,255,255,.32)':'rgba(229,57,53,.13)';
+    x.fill();
+    x.font='66px serif';
+    di(o.e,o.x,o.y,80);
+    x.restore();
+
+    if(o.y>py-45&&o.y<py+25&&Math.abs(o.x-p.x)<p.w*bs()/2+27){
+      items.splice(i,1);
+      save.dex[o.e]=(save.dex[o.e]||0)+1;
+      if(o.g){
+        score+=5;goodCnt++;combo++;if(combo>maxCombo)maxCombo=combo;
+        bScale=1.24;
+        stack.push(o.e);if(stack.length>6)stack.shift();
+        pops.push({t:'+5',c:'#2e7d32',x:o.x,y:o.y,a:1});
+        burst(o.x,o.y,true);sfxGood(combo);
+        if(combo>0&&combo%10===0){
+          if(hp<5){hp++;pops.push({t:'💚 10콤보! 하트 회복!',c:'#1b5e20',x:p.x,y:py-55,a:1.2})}
+          else{pops.push({t:'🔥 '+combo+'콤보 달성!',c:'#ef6c00',x:p.x,y:py-55,a:1.2})}
+          sfxLv();
+        }
+      }else{
+        score=Math.max(0,score-5);hp--;combo=0;shake=7;badFlash=.32;
+        pops.push({t:'-5 바구니 축소!',c:'#d32f2f',x:o.x,y:o.y,a:1});
+        burst(o.x,o.y,false);sfxBad();
+      }
+      hud();
+      if(hp<=0){x.restore();return end()}
+      if(score>=next){next+=30;sp+=.15;pops.push({t:'⚡ 속도 UP! (LV.'+(Math.round((sp-1)/.15)+1)+')',c:'#1565c0',x:W/2,y:H*.32,a:1.2});sfxLv()}
+    }else if(o.y>CZ+10)items.splice(i,1);
+  }
+
+  // 조작 띠
+  x.fillStyle=tY!==null?'rgba(46,125,50,.28)':'rgba(46,125,50,.15)';
+  x.fillRect(0,CZ,W,H-CZ);
+  x.fillStyle='rgba(46,125,50,.5)';
+  x.fillRect(0,CZ,W,3);
+
+  // 조작 트랙 가이드 및 현재 바구니 위치 표시기
+  const ty=CZ+(H-CZ)/2;
+  x.fillStyle='rgba(46,125,50,.14)';
+  x.beginPath();x.roundRect?x.roundRect(35,CZ+14,W-70,6,3):x.rect(35,CZ+14,W-70,6);x.fill();
+  x.fillStyle='#2e7d32';
+  x.beginPath();x.arc(p.x,CZ+17,7,0,6.28);x.fill();
+
+  x.fillStyle='#2e7d32';x.font='bold 17px sans-serif';
+  x.fillText('👈  여기를 터치해서 움직이세요  👉',W/2,ty);
+  x.font='13px sans-serif';x.fillStyle='rgba(46,125,50,.7)';
+  x.fillText('좌우로 드래그',W/2,ty+24);
+
+  // 바구니와 탄성 애니메이션
+  if(bScale>1)bScale=Math.max(1,bScale-.025*dt/16);
+  const k=bs()*bScale;
+  x.font=(56*k|0)+'px serif';
+  x.fillText('🧺',p.x,py);
+  x.font=(22*k|0)+'px serif';
+  stack.forEach((e,i)=>di(e,p.x+((i%3)-1)*18*k,py-14*k-(i/3|0)*14*k,27*k));
+
+  // 콤보 배지 표시
+  if(combo>=2){
+    x.font='bold 16px sans-serif';
+    x.fillStyle=combo>=10?'#e65100':'#2e7d32';
+    x.fillText('🔥 '+combo+' COMBO',p.x,py+36);
+  }
+
+  // 파티클 업데이트
+  for(let i=parts.length-1;i>=0;i--){
+    const pt=parts[i];
+    pt.x+=pt.vx*dt/16;pt.y+=pt.vy*dt/16;pt.vy+=.15*dt/16;pt.a-=.032*dt/16;
+    if(pt.a<=0){parts.splice(i,1);continue}
+    x.globalAlpha=Math.min(1,pt.a);x.fillStyle=pt.c;
+    x.beginPath();x.arc(pt.x,pt.y,pt.r,0,6.28);x.fill();
+  }
+  x.globalAlpha=1;
+
+  // 점수 팝업
+  for(let i=pops.length-1;i>=0;i--){
+    const q=pops[i];q.y-=1.2*dt/16;q.a-=.02*dt/16;
+    if(q.a<=0){pops.splice(i,1);continue}
+    x.globalAlpha=Math.min(1,q.a);x.font='bold 28px sans-serif';x.fillStyle=q.c;x.fillText(q.t,q.x,q.y);x.globalAlpha=1;
+  }
+
+  if(badFlash>0){
+    badFlash=Math.max(0,badFlash-.025*dt/16);
+    x.fillStyle='rgba(211,47,47,'+badFlash+')';
+    x.fillRect(0,0,W,H);
+  }
+  x.restore();
+  requestAnimationFrame(loop);
+}
+
+function start(){initAudio();reset();show();run=true;last=0;requestAnimationFrame(loop)}
+function show(id){['start','over','pause','dex','pwa-modal'].forEach(s=>document.getElementById(s).classList.toggle('hide',s!==id))}
+function end(){
+  run=false;paused=false;sfxOver();
+  const isNew=score>save.best;
+  if(isNew)save.best=score;
+  if(maxCombo>save.maxCombo)save.maxCombo=maxCombo;
+  persist();updateStartStats();
+  fs.textContent=score;
+  document.getElementById('new-rec').classList.toggle('hide',!isNew||score===0);
+  document.getElementById('rk-badge').textContent=getRank(score);
+  document.getElementById('best-fs').textContent=save.best;
+  document.getElementById('mc-fs').textContent=maxCombo;
+  document.getElementById('gc-fs').textContent=goodCnt+'개';
+  show('over');
+}
+
 go.onclick=start;re.onclick=start;
-addEventListener('keydown',e=>keys[e.key]=true);addEventListener('keyup',e=>keys[e.key]=false);
-let tY=null;const tm=e=>{if(!run)return;e.preventDefault();const t=e.touches[0];if(t&&p){p.x=t.clientX;tY=t.clientY}};c.addEventListener('touchstart',tm,{passive:false});c.addEventListener('touchmove',tm,{passive:false});const te=e=>{if(!e.touches.length)tY=null};c.addEventListener('touchend',te);c.addEventListener('touchcancel',te);c.addEventListener('mousemove',e=>{if(p)p.x=e.clientX});c.addEventListener('contextmenu',e=>e.preventDefault());
-if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));</script></body></html>
+
+// 일시정지 & 소리 제어
+const btnSnd=document.getElementById('btn-snd'),btnPause=document.getElementById('btn-pause');
+btnSnd.onclick=e=>{e.stopPropagation();sndOn=!sndOn;btnSnd.textContent=sndOn?'🔊':'🔇';if(sndOn)tone(660,.08)};
+btnPause.onclick=e=>{
+  e.stopPropagation();
+  if(!run)return;
+  paused=!paused;
+  if(paused){show('pause')}else{show();last=0;requestAnimationFrame(loop)}
+};
+document.getElementById('btn-resume').onclick=()=>{if(!run)return;paused=false;show();last=0;requestAnimationFrame(loop)};
+document.getElementById('btn-restart').onclick=start;
+
+// 건강 도감 모달
+let dexFrom='start',dexTab='g';
+function renderDex(tab){
+  dexTab=tab;
+  document.getElementById('tab-g').classList.toggle('active',tab==='g');
+  document.getElementById('tab-b').classList.toggle('active',tab==='b');
+  const list=tab==='g'?G:B,grid=document.getElementById('dex-grid');
+  grid.innerHTML='';
+  list.forEach((em,idx)=>{
+    const d=document.createElement('div');
+    d.className='dex-item'+(tab==='b'?' bad':'')+(idx===0?' sel':'');
+    const cnt=save.dex[em]||0;
+    const iconHtml=em==='🍐'?`<img src="${PEAR_SRC}" style="width:28px;height:28px" alt="한국 배">`:em;
+    d.innerHTML=`<div class="em">${iconHtml}</div><div class="nm">${INFO[em][0]}</div><div class="cnt">${cnt>0?'수집 '+cnt+'회':'미수집'}</div>`;
+    d.onclick=()=>{
+      grid.querySelectorAll('.dex-item').forEach(el=>el.classList.remove('sel'));
+      d.classList.add('sel');
+      showDexDetail(em,tab==='b');
+    };
+    grid.appendChild(d);
+  });
+  showDexDetail(list[0],tab==='b');
+}
+function showDexDetail(em,isBad){
+  const box=document.getElementById('dex-detail'),info=INFO[em],cnt=save.dex[em]||0;
+  box.className='dex-detail'+(isBad?' bad':'');
+  const iconHtml=em==='🍐'?`<img src="${PEAR_SRC}" style="width:22px;height:22px;vertical-align:middle" alt="배">`:em;
+  box.innerHTML=`<div class="dt-head"><span>${iconHtml} ${info[0]} <small style="font-weight:600;color:#607d8b">(${cnt}회 획득)</small></span><span class="grade">${info[1]}</span></div><p style="margin:0;font-size:13.5px;color:#37474f">${info[2]}</p>`;
+}
+function openDex(from){dexFrom=from;renderDex('g');show('dex')}
+document.getElementById('btn-dex').onclick=()=>openDex('start');
+document.getElementById('btn-dex2').onclick=()=>openDex('over');
+document.getElementById('tab-g').onclick=()=>renderDex('g');
+document.getElementById('tab-b').onclick=()=>renderDex('b');
+document.getElementById('btn-dex-close').onclick=()=>show(dexFrom);
+
+// PWA 설치 제어
+let deferredPrompt=null;
+const btnPwa=document.getElementById('btn-pwa');
+const isStandalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+if(isStandalone)btnPwa.classList.add('hide');
+addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  btnPwa.classList.remove('hide');
+  btnPwa.textContent='📲 휴대폰 앱으로 바로 설치하기';
+});
+addEventListener('appinstalled',()=>{deferredPrompt=null;btnPwa.classList.add('hide');showToast('✅ 앱이 홈 화면에 설치되었어요!')});
+btnPwa.onclick=async()=>{
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    const {outcome}=await deferredPrompt.userChoice;
+    if(outcome==='accepted')deferredPrompt=null;
+  }else{
+    show('pwa-modal');
+  }
+};
+document.getElementById('btn-pwa-close').onclick=()=>show('start');
+
+// 결과 공유하기
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hide');
+  clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.add('hide'),2200);
+}
+document.getElementById('btn-share').onclick=async()=>{
+  const txt=`🌿 [튼튼 대장 지키기]\n점수: ${score}점 (${getRank(score)})\n🔥 최대 콤보: ${maxCombo} | 🏆 최고 기록: ${save.best}점\n대장암 예방 생활습관 게임에 도전해보세요!`;
+  if(navigator.share){
+    try{await navigator.share({title:'튼튼 대장 지키기',text:txt,url:location.href});return}catch(e){}
+  }
+  try{await navigator.clipboard.writeText(txt);showToast('📋 결과 문구가 복사되었어요!')}
+  catch(e){showToast('점수: '+score+'점 ('+getRank(score)+')')}
+};
+
+addEventListener('keydown',e=>{
+  keys[e.key]=true;
+  if(e.key==='Escape'&&run){btnPause.click()}
+});
+addEventListener('keyup',e=>keys[e.key]=false);
+let tY=null;const tm=e=>{if(!run||paused)return;e.preventDefault();const t=e.touches[0];if(t&&p){p.x=t.clientX;tY=t.clientY}};c.addEventListener('touchstart',tm,{passive:false});c.addEventListener('touchmove',tm,{passive:false});const te=e=>{if(!e.touches.length)tY=null};c.addEventListener('touchend',te);c.addEventListener('touchcancel',te);c.addEventListener('mousemove',e=>{if(p&&!paused)p.x=e.clientX});c.addEventListener('contextmenu',e=>e.preventDefault());
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));</script></body></html>
