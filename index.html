@@ -88,24 +88,24 @@ button:active{transform:scale(.96)}
   <div class="mode-list">
     <div class="mode-card" id="card-catch">
       <div class="mode-info">
-        <div class="mode-title">🧺 1. 건강 바구니 <span class="mode-best" id="best-catch">최고 0</span></div>
-        <div class="mode-desc">바구니를 움직여 채소·과일·운동·<b>건강검진(🩺🏥)</b>을 받고 발암 습관은 피하세요!</div>
+        <div class="mode-title">1. 🧺 떨어지는 게임 <span class="mode-best" id="best-catch">최고 0</span></div>
+        <div class="mode-desc">떨어지는 채소·과일·운동·<b>건강검진(🩺🏥)</b>을 바구니로 받고 발암 습관은 피하세요!</div>
       </div>
-      <button id="go" class="mode-play">시작하기</button>
+      <button id="go" class="mode-play">게임 시작</button>
     </div>
 
     <div class="mode-card shoot" id="card-shoot">
       <div class="mode-info">
-        <div class="mode-title">🚀 2. 대장 수호 슈팅 <span class="mode-best" id="best-shoot">최고 0</span></div>
-        <div class="mode-desc">내시경 광선으로 <b>대장 용종(👾)</b>과 발암물질(🌭🍺🚬)을 쏴서 없애고, 건강 아이템을 받아 <b>3단 광선</b>으로 강화하세요!</div>
+        <div class="mode-title">2. 🚀 슈팅 게임 <span class="mode-best" id="best-shoot">최고 0</span></div>
+        <div class="mode-desc">내시경 광선으로 <b>대장 용종(👾)</b>과 발암물질(🌭🍺🚬)을 쏴서 없애고 <b>3단 광선</b>으로 강화하세요!</div>
       </div>
       <button id="go-shoot" class="mode-play">슈팅 시작</button>
     </div>
 
     <div class="mode-card sort" id="card-sort">
       <div class="mode-info">
-        <div class="mode-title">⚡ 3. 초스피드 판별 <span class="mode-best" id="best-sort">최고 0</span></div>
-        <div class="mode-desc">나타나는 음식·습관이 대장에 <b>좋은지(⭕) 해로운지(❌)</b> 빠르게 판별하는 두뇌 순발력 게임!</div>
+        <div class="mode-title">3. ⚡ OX 판별 게임 <span class="mode-best" id="best-sort">최고 0</span></div>
+        <div class="mode-desc">나타나는 음식·습관이 대장에 <b>좋은지(⭕) 해로운지(❌)</b> 빠르게 고르는 순발력 게임!</div>
       </div>
       <button id="go-sort" class="mode-play">판별 시작</button>
     </div>
@@ -805,4 +805,8 @@ c.addEventListener('touchend',te);c.addEventListener('touchcancel',te);
 c.addEventListener('mousemove',e=>{if(p&&!paused&&mode!=='sort')p.x=e.clientX});
 c.addEventListener('mousedown',e=>{if(run&&!paused&&mode==='sort')judgeSort(e.clientX>=W/2)});
 c.addEventListener('contextmenu',e=>e.preventDefault());
-if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));</script></body></html>
+if("serviceWorker" in navigator){
+  let refreshing=false;
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!refreshing){refreshing=true;location.reload()}});
+  addEventListener("load",()=>navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{}));
+}</script></body></html>
