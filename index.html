@@ -63,14 +63,14 @@ button:active{transform:scale(.96)}
 
 <div id="start" class="screen"><div class="card">
   <h1>🌿 튼튼 대장 지키기</h1>
-  <p>바구니 🧺를 좌우로 움직여<br>건강한 음식과 습관을 받으세요!</p>
+  <p>바구니 🧺를 좌우로 움직여<br>건강한 음식과 습관·<b>건강검진</b>을 받으세요!</p>
   <div class="stats-bar">
     <div class="stat-box"><span>🏆 최고 점수</span><b id="st-best">0</b></div>
     <div class="stat-box"><span>🔥 최고 콤보</span><b id="st-combo">0</b></div>
-    <div class="stat-box"><span>📖 도감 수집</span><b id="st-dex">0/31</b></div>
+    <div class="stat-box"><span>📖 도감 수집</span><b id="st-dex">0/33</b></div>
   </div>
-  <p>🥦🥬🍅🍎🍇🌾🍐🏃 등 채소·과일·통곡물·운동은 +5점<br>🌭🥓🥩🍔🍟🍩🍺🥃🚬🥤 등 가공육·기름진 음식·단 음식·술·담배는 -5점 & 바구니가 작아져요</p>
-  <div class="tip-banner">💡 연속 10콤보 달성 시 잃어버린 하트(❤️)가 1개 회복돼요!</div>
+  <p>🥦🥬🍅🍎🍇🌾🍐🏃<b>🩺🏥</b> 등 채소·과일·통곡물·운동·<b>건강검진</b>은 +5점<br>🌭🥓🥩🍔🍟🍩🍺🥃🚬🥤 등 가공육·기름진 음식·단 음식·술·담배는 -5점 & 바구니가 작아져요</p>
+  <div class="tip-banner">💡 <b>🩺·🏥 건강검진</b>을 받거나 <b>연속 10콤보</b> 달성 시 잃어버린 하트(❤️)가 회복돼요!</div>
   <p style="font-size:13.5px;color:#546e7a">⌨️ ←/→ 키 · 📱 터치/마우스로 이동</p>
   <div class="btn-row">
     <button id="go">시작하기</button>
@@ -108,9 +108,9 @@ button:active{transform:scale(.96)}
 
 <div id="dex" class="screen hide"><div class="card">
   <h1>📖 대장 건강·발암 도감</h1>
-  <p style="font-size:13px;color:#546e7a">세계암연구기금(WCRF) · 국제암연구소(IARC) 근거 기준</p>
+  <p style="font-size:13px;color:#546e7a">세계암연구기금(WCRF) · 국제암연구소(IARC) · 국가암검진 기준</p>
   <div class="tabs">
-    <button id="tab-g" class="tab active good">🌿 좋은 습관 (16)</button>
+    <button id="tab-g" class="tab active good">🌿 좋은 습관·검진 (18)</button>
     <button id="tab-b" class="tab bad">⚠️ 피할 습관 (15)</button>
   </div>
   <div id="dex-grid" class="dex-grid"></div>
@@ -139,7 +139,8 @@ button:active{transform:scale(.96)}
 
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d');let W,H,DPR,p;function rs(){const r=c.getBoundingClientRect(),w=Math.round(r.width)||document.documentElement.clientWidth,h=Math.round(r.height)||document.documentElement.clientHeight,d=Math.min(window.devicePixelRatio||1,3);if(w===W&&h===H&&d===DPR)return;W=w;H=h;DPR=d;c.width=Math.round(w*d);c.height=Math.round(h*d);x.setTransform(d,0,0,d,0,0);if(p)p.x=Math.max(35,Math.min(W-35,p.x))}rs();let rsq=0;const rsl=()=>{if(!rsq){rsq=1;requestAnimationFrame(()=>{rsq=0;rs()})}};addEventListener('resize',rsl);addEventListener('orientationchange',()=>setTimeout(rs,250));['gesturestart','gesturechange','gestureend','dblclick'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
-const G=['🥦','🥕','🍎','🍌','🍠','🌾','🥬','🍅','🍇','🍓','🥒','🌽','🍐','🥝','🍊','🏃'],B=['🌭','🥓','🥩','🍺','🚬','🍟','🍔','🍕','🍩','🧁','🍷','🥃','🍖','🥤','🍰'];
+const G=['🥦','🥕','🍎','🍌','🍠','🌾','🥬','🍅','🍇','🍓','🥒','🌽','🍐','🥝','🍊','🏃','🩺','🏥'],B=['🌭','🥓','🥩','🍺','🚬','🍟','🍔','🍕','🍩','🧁','🍷','🥃','🍖','🥤','🍰'];
+const TAGS={'🩺':'건강검진','🏥':'국가암검진','🏃':'규칙적운동'};
 const PEAR_SRC="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImciIGN4PSIzOCUiIGN5PSIzNSUiIHI9IjcwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZjdkNThhIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiNkOWEwNGEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNhODY5MmEiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48cGF0aCBkPSJNNTAgMjZDMzAgMjIgMTAgMzQgMTAgNThDMTAgODAgMjggOTQgNTAgOTRDNzIgOTQgOTAgODAgOTAgNThDOTAgMzQgNzAgMjIgNTAgMjZaIiBmaWxsPSJ1cmwoI2cpIiBzdHJva2U9IiM4YTU0MjAiIHN0cm9rZS13aWR0aD0iMiIvPjxnIGZpbGw9IiNmYmU5YzAiIG9wYWNpdHk9Ii44NSI+PGNpcmNsZSBjeD0iMzAiIGN5PSI1MCIgcj0iMS42Ii8+PGNpcmNsZSBjeD0iNDIiIGN5PSI0MCIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iNTgiIGN5PSI0NCIgcj0iMS41Ii8+PGNpcmNsZSBjeD0iNzAiIGN5PSI1NiIgcj0iMS42Ii8+PGNpcmNsZSBjeD0iMjUiIGN5PSI2NiIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iNDAiIGN5PSI2MiIgcj0iMS41Ii8+PGNpcmNsZSBjeD0iNTUiIGN5PSI3MCIgcj0iMS42Ii8+PGNpcmNsZSBjeD0iNzIiIGN5PSI3NCIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iMzUiIGN5PSI4MCIgcj0iMS41Ii8+PGNpcmNsZSBjeD0iNjIiIGN5PSI4NCIgcj0iMS4zIi8+PGNpcmNsZSBjeD0iODAiIGN5PSI2NCIgcj0iMS4zIi8+PGNpcmNsZSBjeD0iNDgiIGN5PSI1MiIgcj0iMS4yIi8+PGNpcmNsZSBjeD0iMjAiIGN5PSI1NiIgcj0iMS4yIi8+PGNpcmNsZSBjeD0iNjYiIGN5PSIzNCIgcj0iMS4yIi8+PC9nPjxlbGxpcHNlIGN4PSIzNCIgY3k9IjQ0IiByeD0iOSIgcnk9IjYiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii4zNSIgdHJhbnNmb3JtPSJyb3RhdGUoLTMwIDM0IDQ0KSIvPjxwYXRoIGQ9Ik01MCAzMFE0OSAxOCA1NCAxMCIgc3Ryb2tlPSIjNmIzZTE3IiBzdHJva2Utd2lkdGg9IjUiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik01NCAxNlE2OCA0IDgyIDEyUTcwIDI0IDU0IDE2WiIgZmlsbD0iIzVjYjg1YyIgc3Ryb2tlPSIjM2Q4YjNkIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxwYXRoIGQ9Ik01NiAxNVE2OCAxMSA3OCAxMiIgc3Ryb2tlPSIjM2Q4YjNkIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiLz48L3N2Zz4=";
 const PEAR=new Image();PEAR.onload=()=>PEAR.ok=1;PEAR.src=PEAR_SRC;
 function di(e,cx,cy,sz){if(e==='🍐'&&PEAR.ok)x.drawImage(PEAR,cx-sz/2,cy-sz/2,sz,sz);else x.fillText(e,cx,cy)}
@@ -161,6 +162,8 @@ const INFO={
   '🥝':['키위','식이섬유·액티니딘','소화 효소와 수용성·불용성 식이섬유가 고루 들어 있습니다.'],
   '🍊':['귤·감귤류','펙틴·비타민','속껍질에 풍부한 펙틴 성분이 대장 운동을 부드럽게 돕습니다.'],
   '🏃':['규칙적 운동','WCRF 예방 근거 확실','신체활동(주 150분 이상)은 대장암 위험을 낮춘다는 근거가 가장 확실합니다!'],
+  '🩺':['건강검진·대장내시경','조기발견·하트회복','대장내시경으로 선종(용종)을 조기에 발견·절제하면 대장암을 확실히 예방합니다!'],
+  '🏥':['국가 암검진(분변잠혈검사)','만 50세+ 매년·하트회복','만 50세 이상은 매년 국가 암검진(분변잠혈검사)을 받고 이상 시 내시경을 받으세요!'],
   '🌭':['소시지·핫도그','IARC 1군 발암물질','가공육은 국제암연구소(IARC)가 지정한 1군 발암물질로 섭취를 줄여야 합니다.'],
   '🥓':['베이컨·햄','IARC 1군 발암물질','아질산염 등 가공 과정의 성분이 대장 점막 손상과 암 위험을 높입니다.'],
   '🥩':['붉은 고기(소·돼지)','IARC 2A군 발암 추정','과도한 붉은 고기 섭취는 헴철·고온조리 물질을 통해 대장암 위험을 높입니다.'],
@@ -214,7 +217,7 @@ function updateStartStats(){
   document.getElementById('st-best').textContent=save.best;
   document.getElementById('st-combo').textContent=save.maxCombo;
   const cnt=Object.keys(save.dex).filter(k=>save.dex[k]>0).length;
-  document.getElementById('st-dex').textContent=cnt+'/31';
+  document.getElementById('st-dex').textContent=cnt+'/33';
   document.getElementById('bs_ui').textContent=save.best;
 }
 updateStartStats();
@@ -231,10 +234,11 @@ function hud(){
   document.getElementById('bs_ui').textContent=Math.max(save.best,score);
   document.getElementById('lv_ui').textContent=Math.round((sp-1)/.15)+1;
 }
+const HABITS=['🩺','🏥','🏃'];
 function spawn(){
   const g=Math.random()<.6;
-  const arr=g?G:B;
-  items.push({e:arr[Math.random()*arr.length|0],g,x:40+Math.random()*(W-80),y:-45,v:(2+Math.random()*2)*sp,ph:Math.random()*6.28});
+  const e=g?(Math.random()<.24?HABITS[Math.random()*HABITS.length|0]:G[Math.random()*G.length|0]):B[Math.random()*B.length|0];
+  items.push({e,g,x:40+Math.random()*(W-80),y:-45,v:(2+Math.random()*2)*sp,ph:Math.random()*6.28});
 }
 function burst(cx,cy,good){
   const cols=good?['#43a047','#fdd835','#81c784','#a5d6a7']:['#e53935','#ff8a65','#ef5350'];
@@ -275,13 +279,25 @@ function loop(t){
   x.textAlign='center';x.textBaseline='middle';
   for(let i=items.length-1;i>=0;i--){
     const o=items[i];o.y+=o.v*dt/16;
-    // 은은한 후광 표시
+    const isMed=o.e==='🩺'||o.e==='🏥';
+    // 은은한 후광 및 건강검진·운동 이름표 표시
     x.save();
-    x.beginPath();x.arc(o.x,o.y,36,0,6.28);
-    x.fillStyle=o.g?'rgba(255,255,255,.32)':'rgba(229,57,53,.13)';
+    x.beginPath();x.arc(o.x,o.y,38,0,6.28);
+    x.fillStyle=isMed?'rgba(30,136,229,.22)':(o.g?'rgba(255,255,255,.32)':'rgba(229,57,53,.13)');
     x.fill();
+    if(isMed){x.lineWidth=2.5;x.strokeStyle='rgba(21,101,192,.55)';x.stroke()}
     x.font='66px serif';
     di(o.e,o.x,o.y,80);
+    if(TAGS[o.e]){
+      const lbl=TAGS[o.e];
+      x.fillStyle=isMed?'#1565c0':'#2e7d32';
+      x.beginPath();
+      x.roundRect?x.roundRect(o.x-34,o.y+28,68,18,9):x.rect(o.x-34,o.y+28,68,18);
+      x.fill();
+      x.font='bold 11px sans-serif';
+      x.fillStyle='#fff';
+      x.fillText(lbl,o.x,o.y+37);
+    }
     x.restore();
 
     if(o.y>py-45&&o.y<py+25&&Math.abs(o.x-p.x)<p.w*bs()/2+27){
@@ -293,7 +309,11 @@ function loop(t){
         stack.push(o.e);if(stack.length>6)stack.shift();
         pops.push({t:'+5',c:'#2e7d32',x:o.x,y:o.y,a:1});
         burst(o.x,o.y,true);sfxGood(combo);
-        if(combo>0&&combo%10===0){
+        if(isMed&&hp<5){
+          hp++;
+          pops.push({t:'🩺 조기검진! 하트 회복!',c:'#1565c0',x:p.x,y:py-52,a:1.25});
+          sfxLv();
+        }else if(combo>0&&combo%10===0){
           if(hp<5){hp++;pops.push({t:'💚 10콤보! 하트 회복!',c:'#1b5e20',x:p.x,y:py-55,a:1.2})}
           else{pops.push({t:'🔥 '+combo+'콤보 달성!',c:'#ef6c00',x:p.x,y:py-55,a:1.2})}
           sfxLv();
